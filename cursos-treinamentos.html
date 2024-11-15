@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Cursos e Treinamentos</title>
     <style>
-        /* Estilização Básica */
+        /* Estilo geral da página */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,6 +13,27 @@
             background-color: #f4f4f4;
         }
 
+        /* Barra de Menu */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: inline-block;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        /* Estilização do Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -30,6 +51,8 @@
             border-collapse: collapse;
             margin-bottom: 20px;
             background-color: #fff;
+            border-radius: 10px; /* Raio da borda */
+            overflow: hidden;
         }
 
         th, td {
@@ -85,87 +108,94 @@
 </head>
 <body>
 
-<div class="container">
-    <h1>Lista de Cursos e Treinamentos</h1>
-
-    <!-- Filtro de Categoria -->
-    <div class="filter-container">
-        <label for="categoria-filter">Filtrar por Categoria:</label>
-        <select id="categoria-filter" onchange="filterTable()">
-            <option value="">Todas</option>
-            <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
-            <option value="Segurança Pública">Segurança Pública</option>
-            <option value="Tecnologia">Tecnologia</option>
-        </select>
+    <!-- Barra de Navegação -->
+    <div class="navbar">
+        <a href="https://lucaspbg.github.io/curriculo/">Currículo</a>
+        <a href="https://lucaspbg.github.io/curriculo/cursos-treinamentos">Cursos e Treinamentos</a>
+        <a href="https://lucaspbg.github.io/curriculo/leituras">Leitura de Livros</a>
     </div>
 
-    <!-- Tabela de Cursos e Treinamentos -->
-    <table id="curso-table">
-        <thead>
-            <tr>
-                <th>Nome do curso/treinamento</th>
-                <th>Instituição</th>
-                <th>Categoria</th>
-                <th>Carga horária</th>
-                <th>Concluído em</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Proerd</td>
-                <td>PMSC</td>
-                <td>Combate ao uso de entorpecentes</td>
-                <td>50h</td>
-                <td>10/2006</td>
-                <td><button class="btn-certificado" onclick="verCertificado('proerd')">Ver Certificado</button></td>
-            </tr>
-            <tr>
-                <td>Curso de Segurança</td>
-                <td>Universidade X</td>
-                <td>Segurança Pública</td>
-                <td>120h</td>
-                <td>12/2018</td>
-                <td><button class="btn-certificado" onclick="verCertificado('seguranca')">Ver Certificado</button></td>
-            </tr>
-            <tr>
-                <td>Curso de Programação</td>
-                <td>Tech Institute</td>
-                <td>Tecnologia</td>
-                <td>200h</td>
-                <td>04/2022</td>
-                <td><button class="btn-certificado" onclick="verCertificado('programacao')">Ver Certificado</button></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        <h1>Lista de Cursos e Treinamentos</h1>
 
-<script>
-    // Função para filtrar a tabela por categoria
-    function filterTable() {
-        const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
-        const rows = document.querySelectorAll('#curso-table tbody tr');
+        <!-- Filtro de Categoria -->
+        <div class="filter-container">
+            <label for="categoria-filter">Filtrar por Categoria:</label>
+            <select id="categoria-filter" onchange="filterTable()">
+                <option value="">Todas</option>
+                <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
+                <option value="Segurança Pública">Segurança Pública</option>
+                <option value="Tecnologia">Tecnologia</option>
+            </select>
+        </div>
 
-        rows.forEach(row => {
-            const categoryCell = row.cells[2]; // Coluna "Categoria"
-            const categoryText = categoryCell.textContent.toLowerCase();
+        <!-- Tabela de Cursos e Treinamentos -->
+        <table id="curso-table">
+            <thead>
+                <tr>
+                    <th>Nome do curso/treinamento</th>
+                    <th>Instituição</th>
+                    <th>Categoria</th>
+                    <th>Carga horária</th>
+                    <th>Concluído em</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Proerd</td>
+                    <td>PMSC</td>
+                    <td>Combate ao uso de entorpecentes</td>
+                    <td>50h</td>
+                    <td>10/2006</td>
+                    <td><button class="btn-certificado" onclick="verCertificado('proerd')">Ver Certificado</button></td>
+                </tr>
+                <tr>
+                    <td>Curso de Segurança</td>
+                    <td>Universidade X</td>
+                    <td>Segurança Pública</td>
+                    <td>120h</td>
+                    <td>12/2018</td>
+                    <td><button class="btn-certificado" onclick="verCertificado('seguranca')">Ver Certificado</button></td>
+                </tr>
+                <tr>
+                    <td>Curso de Programação</td>
+                    <td>Tech Institute</td>
+                    <td>Tecnologia</td>
+                    <td>200h</td>
+                    <td>04/2022</td>
+                    <td><button class="btn-certificado" onclick="verCertificado('programacao')">Ver Certificado</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-            if (filterValue === '' || categoryText.includes(filterValue)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
+    <script>
+        // Função para filtrar a tabela por categoria
+        function filterTable() {
+            const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
+            const rows = document.querySelectorAll('#curso-table tbody tr');
 
-    // Função para exibir o certificado
-    function verCertificado(certificado) {
-        alert("Abrir certificado para: " + certificado);
-        // Aqui você pode redirecionar para o arquivo PDF ou outra página
-        // Exemplo:
-        // window.open('caminho-do-certificado.pdf', '_blank');
-    }
-</script>
+            rows.forEach(row => {
+                const categoryCell = row.cells[2]; // Coluna "Categoria"
+                const categoryText = categoryCell.textContent.toLowerCase();
+
+                if (filterValue === '' || categoryText.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Função para exibir o certificado
+        function verCertificado(certificado) {
+            alert("Abrir certificado para: " + certificado);
+            // Aqui você pode redirecionar para o arquivo PDF ou outra página
+            // Exemplo:
+            // window.open('caminho-do-certificado.pdf', '_blank');
+        }
+    </script>
 
 </body>
 </html>
