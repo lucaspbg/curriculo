@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Lista de Cursos e Leitura</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Minha Lista de Cursos, Treinamentos e Leitura</h1>
+    
+    <div class="section">
+        <h2>Cursos e Treinamentos</h2>
+        <ul class="list" id="cursos-list">
+            <li>
+                <h3>Curso 1: Nome do Curso</h3>
+                <p>Descrição breve do curso.</p>
+            </li>
+            <li>
+                <h3>Curso 2: Nome do Curso</h3>
+                <p>Descrição breve do curso.</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Leitura de Livros</h2>
+        <ul class="list" id="livros-list">
+            <li>
+                <h3>Livro 1: Título do Livro</h3>
+                <p>Descrição breve do livro.</p>
+            </li>
+            <li>
+                <h3>Livro 2: Título do Livro</h3>
+                <p>Descrição breve do livro.</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Link para o arquivo JavaScript -->
+    <script src="scripts.js"></script>
+</body>
+</html>
