@@ -3,42 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Lista de Cursos e Leitura</title>
-    <!-- Link para o arquivo CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <title>Lista de Cursos e Treinamentos</title>
+    <style>
+        /* Estilização Básica */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo da Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilo do filtro */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .filter-container label {
+            font-weight: bold;
+        }
+
+        .filter-container select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Botão do Certificado */
+        .btn-certificado {
+            padding: 6px 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-certificado:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Minha Lista de Cursos, Treinamentos e Leitura</h1>
-    
-    <div class="section">
-        <h2>Cursos e Treinamentos</h2>
-        <ul class="list" id="cursos-list">
-            <li>
-                <h3>Curso 1: Nome do Curso</h3>
-                <p>Descrição breve do curso.</p>
-            </li>
-            <li>
-                <h3>Curso 2: Nome do Curso</h3>
-                <p>Descrição breve do curso.</p>
-            </li>
-        </ul>
-    </div>
-    
-    <div class="section">
-        <h2>Leitura de Livros</h2>
-        <ul class="list" id="livros-list">
-            <li>
-                <h3>Livro 1: Título do Livro</h3>
-                <p>Descrição breve do livro.</p>
-            </li>
-            <li>
-                <h3>Livro 2: Título do Livro</h3>
-                <p>Descrição breve do livro.</p>
-            </li>
-        </ul>
+
+<div class="container">
+    <h1>Lista de Cursos e Treinamentos</h1>
+
+    <!-- Filtro de Categoria -->
+    <div class="filter-container">
+        <label for="categoria-filter">Filtrar por Categoria:</label>
+        <select id="categoria-filter" onchange="filterTable()">
+            <option value="">Todas</option>
+            <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
+            <option value="Segurança Pública">Segurança Pública</option>
+            <option value="Tecnologia">Tecnologia</option>
+        </select>
     </div>
 
-    <!-- Link para o arquivo JavaScript -->
-    <script src="scripts.js"></script>
+    <!-- Tabela de Cursos e Treinamentos -->
+    <table id="curso-table">
+        <thead>
+            <tr>
+                <th>Nome do curso/treinamento</th>
+                <th>Instituição</th>
+                <th>Categoria</th>
+                <th>Carga horária</th>
+                <th>Concluído em</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Proerd</td>
+                <td>PMSC</td>
+                <td>Combate ao uso de entorpecentes</td>
+                <td>50h</td>
+                <td>10/2006</td>
+                <td><button class="btn-certificado" onclick="verCertificado('proerd')">Ver Certificado</button></td>
+            </tr>
+            <tr>
+                <td>Curso de Segurança</td>
+                <td>Universidade X</td>
+                <td>Segurança Pública</td>
+                <td>120h</td>
+                <td>12/2018</td>
+                <td><button class="btn-certificado" onclick="verCertificado('seguranca')">Ver Certificado</button></td>
+            </tr>
+            <tr>
+                <td>Curso de Programação</td>
+                <td>Tech Institute</td>
+                <td>Tecnologia</td>
+                <td>200h</td>
+                <td>04/2022</td>
+                <td><button class="btn-certificado" onclick="verCertificado('programacao')">Ver Certificado</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Função para filtrar a tabela por categoria
+    function filterTable() {
+        const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
+        const rows = document.querySelectorAll('#curso-table tbody tr');
+
+        rows.forEach(row => {
+            const categoryCell = row.cells[2]; // Coluna "Categoria"
+            const categoryText = categoryCell.textContent.toLowerCase();
+
+            if (filterValue === '' || categoryText.includes(filterValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Função para exibir o certificado
+    function verCertificado(certificado) {
+        alert("Abrir certificado para: " + certificado);
+        // Aqui você pode redirecionar para o arquivo PDF ou outra página
+        // Exemplo:
+        // window.open('caminho-do-certificado.pdf', '_blank');
+    }
+</script>
+
 </body>
 </html>
