@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>Redirecionando...</title>
     <script>
-        // Obter o parâmetro da URL (último segmento após "/curriculo/")
-        const path = window.location.pathname.split("/").pop();
+        // Obter o caminho completo após "/curriculo/"
+        const fullPath = window.location.pathname;
 
-        // Mostrar o valor de `path` para depuração
-        alert("Valor de 'path': " + path);
+        // Extrair o último segmento do caminho (após "/curriculo/")
+        const path = fullPath.split("/").pop();
 
         // Base do diretório de PDFs
         const pdfDirectory = "https://lucaspbg.github.io/curriculo/pdf/";
@@ -28,9 +28,6 @@
             pdfUrl = pdfDirectory + "Padrao.pdf";
         }
 
-        // Mostrar o URL final do PDF para depuração
-        alert("URL do PDF: " + pdfUrl);
-
         // Redirecionar para o URL do PDF
         window.location.href = pdfUrl;
     </script>
@@ -39,4 +36,3 @@
     <p>Redirecionando...</p>
 </body>
 </html>
-
