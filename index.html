@@ -2,9 +2,34 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://lucaspbg.github.io/curriculo/pdf/Currículo%20-%20Lucas%20Pereira%20Borges.pdf">
-    </head>
-<body>
+        <script>
+        // Obter o parâmetro da URL (último segmento após "/curriculo/")
+        const path = window.location.pathname.split("/").pop();
 
+        // Definir a URL base do diretório de PDFs
+        const pdfDirectory = "https://lucaspbg.github.io/curriculo/pdf/";
+
+        // Inicializar a variável do arquivo PDF
+        let pdfName = "";
+
+        // Verificar o parâmetro e definir o PDF correspondente
+        if (path === "next-fit") {
+            pdfName = "Next%20Fit.pdf";
+        } else if (path === "betah-sistemas") {
+            pdfName = "Betah%20Sistemas.pdf";
+        } else if (path === "empresa-x") {
+            pdfName = "Empresa%20X.pdf";
+        } else {
+            // PDF padrão caso o parâmetro não corresponda a nenhuma empresa
+            pdfName = "Currículo%20-%20Lucas%20Pereira%20Borges.pdf";
+        }
+
+        // Redirecionar para o arquivo PDF correspondente
+        const pdfUrl = pdfDirectory + pdfName;
+        window.location.href = pdfUrl;
+    </script>
+</head>
+<body>
+  
 </body>
 </html>
