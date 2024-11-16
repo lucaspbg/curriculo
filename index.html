@@ -2,26 +2,34 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-        <script>
+    <title>Redirecionando...</title>
+    <script>
         // Obter o parâmetro da URL (último segmento após "/curriculo/")
         const path = window.location.pathname.split("/").pop();
 
+        // Base do diretório de PDFs
+        const pdfDirectory = "https://lucaspbg.github.io/curriculo/pdf/";
+
+        // Variável para armazenar o URL do PDF
+        let pdfUrl = "";
+
         // Verificar o parâmetro e definir o PDF correspondente
         if (path === "next-fit") {
-        <meta http-equiv="refresh" content="0; url=https://lucaspbg.github.io/curriculo/pdf/Next%20Fit.pdf">
+            pdfUrl = pdfDirectory + "Next%20Fit.pdf";
         } else if (path === "betah-sistemas") {
-        <meta http-equiv="refresh" content="0; url=https://lucaspbg.github.io/curriculo/pdf/Next%20Fit.pdf">
+            pdfUrl = pdfDirectory + "Betah%20Sistemas.pdf";
         } else if (path === "empresa-x") {
-        <meta http-equiv="refresh" content="0; url=https://lucaspbg.github.io/curriculo/pdf/Next%20Fit.pdf">
+            pdfUrl = pdfDirectory + "Empresa%20X.pdf";
         } else {
-        // PDF padrão caso o parâmetro não corresponda a nenhuma empresa
-        <meta http-equiv="refresh" content="0; url=https://lucaspbg.github.io/curriculo/pdf/Next%20Fit.pdf">
+            // PDF padrão caso o parâmetro não corresponda a nenhuma empresa
+            pdfUrl = pdfDirectory + "Padrao.pdf";
         }
 
-
+        // Redirecionar para o URL do PDF
+        window.location.href = pdfUrl;
     </script>
 </head>
 <body>
-  
+    <p>Redirecionando...</p>
 </body>
 </html>
