@@ -7,6 +7,9 @@
         // Obter o parâmetro da URL (último segmento após "/curriculo/")
         const path = window.location.pathname.split("/").pop();
 
+        // Mostrar o valor de `path` para depuração
+        alert("Valor de 'path': " + path);
+
         // Base do diretório de PDFs
         const pdfDirectory = "https://lucaspbg.github.io/curriculo/pdf/";
 
@@ -25,6 +28,9 @@
             pdfUrl = pdfDirectory + "Padrao.pdf";
         }
 
+        // Mostrar o URL final do PDF para depuração
+        alert("URL do PDF: " + pdfUrl);
+
         // Redirecionar para o URL do PDF
         window.location.href = pdfUrl;
     </script>
@@ -33,3 +39,4 @@
     <p>Redirecionando...</p>
 </body>
 </html>
+
