@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <title>Redirecionando...</title>
     <script>
-        // Obter o caminho completo após "/curriculo/"
-        const fullPath = window.location.pathname;
 
-        // Extrair o último segmento do caminho (após "/curriculo/")
-        const path = fullPath.split("/").pop();
+        //const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
+        // Capturar o parâmetro da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
 
-        // Base do diretório de PDFs
-        const pdfDirectory = "https://lucaspereiraborges.netlify.app/curriculo/pdf/";
-
-        // Variável para armazenar o URL do PDF
+        // Variável para armazenar o URL final do PDF
         let pdfUrl = "";
 
-        // Verificar o parâmetro e definir o PDF correspondente
-        if (path === "next-fit") {
-            pdfUrl = pdfDirectory + "Next%20Fit.pdf";
-        } else if (path === "betah-sistemas") {
-            pdfUrl = pdfDirectory + "Betah%20Sistemas.pdf";
-        } else if (path === "empresa-x") {
-            pdfUrl = pdfDirectory + "Empresa%20X.pdf";
+        // Lógica de redirecionamento baseada no valor do parâmetro
+        if (param === "next-fit") {
+            pdfUrl = "pdf/Next%20Fit.pdf";
+        } else if (param === "betah-sistemas") {
+            pdfUrl = "pdf/Betah%20Sistemas.pdf";
+        } else if (param === "empresa-x") {
+            pdfUrl = "pdf/Empresa%20X.pdf";
         } else {
-            // PDF padrão caso o parâmetro não corresponda a nenhuma empresa
-            pdfUrl = pdfDirectory + "Padrao.pdf";
+            // Caso o parâmetro não corresponda a nenhuma empresa, usar PDF padrão
+            pdfUrl = "pdf/Curriculo.pdf";
         }
+
+        // Exibir o URL final no console para depuração
+        console.log("URL do PDF:", pdfUrl);
 
         // Redirecionar para o URL do PDF
         window.location.href = pdfUrl;

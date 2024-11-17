@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leituras</title>
+    <style>
+        /* Estilo geral da página */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Barra de Menu */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: inline-block;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        /* Estilização do Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Estilo da Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 10px; /* Raio da borda */
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilo do filtro */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .filter-container label {
+            font-weight: bold;
+        }
+
+        .filter-container select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Botão do Certificado */
+        .btn-certificado {
+            padding: 6px 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-certificado:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo para responsividade */
+        @media screen and (max-width: 768px) {
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+
+            th {
+                background-color: #f4f4f4;
+                text-align: left;
+            }
+
+            td {
+                display: block;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                top: 5px;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de Navegação -->
+    <div class="navbar">
+        <a id="curriculoButton" href="/curriculo">Currículo</a>
+        <a id="videoButton" href="video">Vídeo</a>
+        <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
+        <a id="leiturasButton" href="leituras">Leitura de Livros</a>
+    </div>
+
+    <div class="container">
+        <h1>Lista de Leituras</h1>
+
+        <!-- Filtro de Categoria -->
+        <div class="filter-container">
+            <label for="categoria-filter">Filtrar por Categoria:</label>
+            <select id="categoria-filter" onchange="filterTable()">
+                <option value="">Todas</option>
+                <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
+                <option value="Segurança Pública">Segurança Pública</option>
+                <option value="Tecnologia">Tecnologia</option>
+            </select>
+        </div>
+
+        <!-- Tabela de Cursos e Treinamentos -->
+        <table id="curso-table">
+            <thead>
+                <tr>
+                    <th>Nome do curso/treinamento</th>
+                    <th>Instituição</th>
+                    <th>Categoria</th>
+                    <th>Carga horária</th>
+                    <th onclick="sortTable()">Concluído em</th> <!-- Ordenação por data -->
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dados serão populados aqui via Google Sheets API -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Capturar o parâmetro de hash na URL
+        const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
+        const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
+
+        // Verificar se o parâmetro foi passado
+        if (param) {
+            // Atualizar o link do botão "Currículo"
+            const curriculoButton = document.getElementById("curriculoButton");
+            if (curriculoButton) {
+                curriculoButton.href = "/curriculo?" + "param=" + param; // Definir o link com o hash
+                
+            }
+
+            const videoButton = document.getElementById("videoButton");
+            if (videoButton) {
+                videoButton.href = "video#" + "param=" + param; // Definir o link com o hash
+                
+            }
+
+            const cursosButton = document.getElementById("cursosButton");
+            if (cursosButton) {
+                cursosButton.href = "cursos-treinamentos#" + "param=" + param; // Definir o link com o hash
+                
+            }
+            
+            const leiturasButton = document.getElementById("leiturasButton");
+            if (leiturasButton) {
+                leiturasButton.href = "leituras#" + "param=" + param; // Definir o link com o hash
+                
+            }
+
+        }
+
+        // Função para ordenar a tabela por data (coluna "Concluído em")
+        function sortTable() {
+            const table = document.getElementById("curso-table");
+            const rows = Array.from(table.rows).slice(1); // Pula a primeira linha de cabeçalho
+            const sortedRows = rows.sort((rowA, rowB) => {
+                const dateA = new Date(rowA.cells[4].textContent); // Coluna "Concluído em"
+                const dateB = new Date(rowB.cells[4].textContent);
+                return dateA - dateB; // Ordena por data
+            });
+
+            sortedRows.forEach(row => table.appendChild(row)); // Reaplica as linhas ordenadas
+        }
+
+        // Função para filtrar a tabela por categoria
+        function filterTable() {
+            const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
+            const rows = document.querySelectorAll('#curso-table tbody tr');
+
+            rows.forEach(row => {
+                const categoryCell = row.cells[2]; // Coluna "Categoria"
+                const categoryText = categoryCell.textContent.toLowerCase();
+
+                if (filterValue === '' || categoryText.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Função para exibir o certificado
+        function verCertificado(certificado) {
+            alert("Abrir certificado para: " + certificado);
+        }
+
+        // Função para popular a tabela com dados do Google Sheets
+        async function fetchData() {
+            const url = 'https://spreadsheets.google.com/feeds/list/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/od6/public/values?alt=json';
+
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            const entries = data.feed.entry;
+            const tbody = document.querySelector('#curso-table tbody');
+            tbody.innerHTML = ''; // Limpa as linhas existentes
+
+            entries.forEach(entry => {
+                const row = document.createElement('tr');
+                const nome = entry.gsx$nome.$t;
+                const instituicao = entry.gsx$instituicao.$t;
+                const categoria = entry.gsx$categoria.$t;
+                const cargaHoraria = entry.gsx$cargahoraria.$t;
+                const concluidoEm = entry.gsx$concluidoem.$t;
+
+                row.innerHTML = `
+                    <td>${nome}</td>
+                    <td>${instituicao}</td>
+                    <td>${categoria}</td>
+                    <td>${cargaHoraria}</td>
+                    <td>${concluidoEm}</td>
+                    <td><button class="btn-certificado" onclick="verCertificado('${nome}')">Ver Certificado</button></td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        fetchData(); // Chama a função ao carregar a página
+    </script>
+
+</body>
+</html>
