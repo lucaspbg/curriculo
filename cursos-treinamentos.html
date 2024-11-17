@@ -36,6 +36,23 @@
             background-color: #575757;
         }
 
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            padding: 12px 20px;
+        }
+
+        .navbar.responsive .menu-toggle {
+            display: block;
+        }
+
+        .navbar.responsive a {
+            display: block;
+            text-align: left;
+        }
+
         /* Estilização do Container */
         .container {
             max-width: 1200px;
@@ -52,6 +69,10 @@
             min-width: 300px;
         }
 
+        /* Tabela Responsiva */
+        .table-wrapper {
+            overflow-x: auto;
+        }
 
         /* Estilo da Tabela */
         table {
@@ -113,35 +134,61 @@
             background-color: #003e80;
         }
 
-        /* Estilo para responsividade */
+        /* Estilo do botão de menu toggle */
+        .menu-toggle {
+            display: none; /* Inicialmente oculto */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            z-index: 1000;
+        }
+
+        /* Responsividade */
         @media screen and (max-width: 768px) {
-            table, th, td {
-                display: block;
-                width: 100%;
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: -400px; /* Menu fora da tela à esquerda */
+                width: 350px;
+                height: 100%;
+                background-color: #333;
+                overflow-y: auto;
+                transition: left 0.3s ease-in-out; /* Animação de entrada/saída */
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                padding-top: 100px;
             }
 
-            th {
-                background-color: #f4f4f4;
+            .navbar.active {
+                left: 0; /* Traz o menu para dentro da tela */
+            }
+
+            .menu-toggle {
+                display: block; /* Exibe o botão toggle */
+                background-color: #333;
+                padding: 10px 15px;
+                top: 15px;
+                border-radius: 5px;
+            }
+
+            .navbar a {
+                padding: 10px 20px;
                 text-align: left;
-            }
-
-            td {
-                display: block;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                top: 5px;
-                font-weight: bold;
+                border-bottom: 1px solid #444;
             }
         }
+
     </style>
 </head>
 <body>
+
+
+    <!-- Botão de Toggle -->
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
     <!-- Barra de Navegação -->
     <div class="navbar">
@@ -170,7 +217,7 @@
                     <th>Instituição</th>
                     <th>Categoria</th>
                     <th>Carga horária</th>
-                    <th>Concluído em</th> 
+                    <th onclick="sortTable()">Concluído em ▲▼</th> <!-- Ordenação -->
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -182,6 +229,54 @@
     </div>
 
     <script>
+
+        // Responsividade do Menu
+        function toggleMenu() {
+        const navbar = document.querySelector('.navbar');
+        navbar.classList.toggle('active');
+}
+
+// Inicializar a ordem de classificação na abertura da página
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.getElementById("curso-table");
+    if (!table.dataset.sortOrder) {
+        table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
+    }
+});
+
+// Função para ordenar a tabela pela coluna "Concluído em"
+function sortTable() {
+    const table = document.getElementById("curso-table");
+    const rows = Array.from(table.rows).slice(1);
+    const index = 4; // Coluna "Concluído em"
+    let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+
+    rows.sort((a, b) => {
+        const aDate = parseDate(a.cells[index].innerText);
+        const bDate = parseDate(b.cells[index].innerText);
+
+        return isAsc ? aDate - bDate : bDate - aDate;
+    });
+
+    rows.forEach(row => table.tBodies[0].appendChild(row));
+    table.dataset.sortOrder = isAsc ? "asc" : "desc";
+}
+
+// Função para converter datas no formato "MM/YYYY" para objetos Date
+function parseDate(dateStr) {
+    const [month, year] = dateStr.split("/").map(Number);
+    return new Date(year, month - 1);
+}
+
+
+        // Função para converter "MM/YYYY" em um objeto Date
+        function parseDate(dateStr) {
+            const [month, year] = dateStr.split('/').map(Number);
+            return new Date(year, month - 1); // Mês começa em 0 (janeiro é 0)
+        }
+
+
+
         // Capturar o parâmetro de hash na URL
         const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
         const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
@@ -239,7 +334,7 @@
         }
 
 
-        function carregarCursos() {
+    function carregarCursos() {
     const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?output=csv';
 
     Papa.parse(googleSheetUrl, {
@@ -286,12 +381,8 @@
     });
 }
 
-
-
         // Chama a função para carregar os dados quando a página for carregada
         window.onload = carregarCursos;
-
-
 
 
     </script>

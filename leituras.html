@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+   
     <title>Leituras</title>
     <style>
         /* Estilo geral da página */
@@ -33,6 +36,23 @@
             background-color: #575757;
         }
 
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            padding: 12px 20px;
+        }
+
+        .navbar.responsive .menu-toggle {
+            display: block;
+        }
+
+        .navbar.responsive a {
+            display: block;
+            text-align: left;
+        }
+
         /* Estilização do Container */
         .container {
             max-width: 1200px;
@@ -43,6 +63,15 @@
         h1 {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        #categoria-filter{
+            min-width: 300px;
+        }
+
+        /* Tabela Responsiva */
+        .table-wrapper {
+            overflow-x: auto;
         }
 
         /* Estilo da Tabela */
@@ -62,7 +91,7 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color: #333;
             color: white;
             cursor: pointer;
         }
@@ -94,7 +123,7 @@
         /* Botão do Certificado */
         .btn-certificado {
             padding: 6px 12px;
-            background-color: #007BFF;
+            background-color: #013266;
             color: white;
             border: none;
             border-radius: 4px;
@@ -102,38 +131,64 @@
         }
 
         .btn-certificado:hover {
-            background-color: #0056b3;
+            background-color: #003e80;
         }
 
-        /* Estilo para responsividade */
+        /* Estilo do botão de menu toggle */
+        .menu-toggle {
+            display: none; /* Inicialmente oculto */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            z-index: 1000;
+        }
+
+        /* Responsividade */
         @media screen and (max-width: 768px) {
-            table, th, td {
-                display: block;
-                width: 100%;
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: -400px; /* Menu fora da tela à esquerda */
+                width: 350px;
+                height: 100%;
+                background-color: #333;
+                overflow-y: auto;
+                transition: left 0.3s ease-in-out; /* Animação de entrada/saída */
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                padding-top: 100px;
             }
 
-            th {
-                background-color: #f4f4f4;
+            .navbar.active {
+                left: 0; /* Traz o menu para dentro da tela */
+            }
+
+            .menu-toggle {
+                display: block; /* Exibe o botão toggle */
+                background-color: #333;
+                padding: 10px 15px;
+                top: 15px;
+                border-radius: 5px;
+            }
+
+            .navbar a {
+                padding: 10px 20px;
                 text-align: left;
-            }
-
-            td {
-                display: block;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                top: 5px;
-                font-weight: bold;
+                border-bottom: 1px solid #444;
             }
         }
+
     </style>
 </head>
 <body>
+
+
+    <!-- Botão de Toggle -->
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
     <!-- Barra de Navegação -->
     <div class="navbar">
@@ -151,9 +206,6 @@
             <label for="categoria-filter">Filtrar por Categoria:</label>
             <select id="categoria-filter" onchange="filterTable()">
                 <option value="">Todas</option>
-                <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
-                <option value="Segurança Pública">Segurança Pública</option>
-                <option value="Tecnologia">Tecnologia</option>
             </select>
         </div>
 
@@ -161,21 +213,69 @@
         <table id="curso-table">
             <thead>
                 <tr>
-                    <th>Nome do curso/treinamento</th>
-                    <th>Instituição</th>
+                    <th>Título do livro</th>
+                    <th>Autor</th>
                     <th>Categoria</th>
-                    <th>Carga horária</th>
-                    <th onclick="sortTable()">Concluído em</th> <!-- Ordenação por data -->
-                    <th>Ação</th>
+                    <th onclick="sortTable()">Data da leitura ▲▼</th> <!-- Ordenação -->
+                    
                 </tr>
             </thead>
             <tbody>
-                <!-- Dados serão populados aqui via Google Sheets API -->
+             
+
             </tbody>
         </table>
     </div>
 
     <script>
+
+        // Responsividade do Menu
+        function toggleMenu() {
+        const navbar = document.querySelector('.navbar');
+        navbar.classList.toggle('active');
+}
+
+// Inicializar a ordem de classificação na abertura da página
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.getElementById("curso-table");
+    if (!table.dataset.sortOrder) {
+        table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
+    }
+});
+
+// Função para ordenar a tabela pela coluna "Concluído em"
+function sortTable() {
+    const table = document.getElementById("curso-table");
+    const rows = Array.from(table.rows).slice(1);
+    const index = 3; // Coluna "Concluído em"
+    let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+
+    rows.sort((a, b) => {
+        const aDate = parseDate(a.cells[index].innerText);
+        const bDate = parseDate(b.cells[index].innerText);
+
+        return isAsc ? aDate - bDate : bDate - aDate;
+    });
+
+    rows.forEach(row => table.tBodies[0].appendChild(row));
+    table.dataset.sortOrder = isAsc ? "asc" : "desc";
+}
+
+// Função para converter datas no formato "MM/YYYY" para objetos Date
+function parseDate(dateStr) {
+    const [month, year] = dateStr.split("/").map(Number);
+    return new Date(year, month - 1);
+}
+
+
+        // Função para converter "MM/YYYY" em um objeto Date
+        function parseDate(dateStr) {
+            const [month, year] = dateStr.split('/').map(Number);
+            return new Date(year, month - 1); // Mês começa em 0 (janeiro é 0)
+        }
+
+
+
         // Capturar o parâmetro de hash na URL
         const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
         const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
@@ -209,18 +309,6 @@
 
         }
 
-        // Função para ordenar a tabela por data (coluna "Concluído em")
-        function sortTable() {
-            const table = document.getElementById("curso-table");
-            const rows = Array.from(table.rows).slice(1); // Pula a primeira linha de cabeçalho
-            const sortedRows = rows.sort((rowA, rowB) => {
-                const dateA = new Date(rowA.cells[4].textContent); // Coluna "Concluído em"
-                const dateB = new Date(rowB.cells[4].textContent);
-                return dateA - dateB; // Ordena por data
-            });
-
-            sortedRows.forEach(row => table.appendChild(row)); // Reaplica as linhas ordenadas
-        }
 
         // Função para filtrar a tabela por categoria
         function filterTable() {
@@ -241,42 +329,59 @@
 
         // Função para exibir o certificado
         function verCertificado(certificado) {
-            alert("Abrir certificado para: " + certificado);
+            window.open('certificados/' + certificado + '.pdf', '_blank');
         }
 
-        // Função para popular a tabela com dados do Google Sheets
-        async function fetchData() {
-            const url = 'https://spreadsheets.google.com/feeds/list/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/od6/public/values?alt=json';
 
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            const entries = data.feed.entry;
+    function carregarCursos() {
+    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=707712600&output=csv';
+
+    Papa.parse(googleSheetUrl, {
+        download: true,
+        header: true, // Usa a primeira linha como cabeçalho
+        complete: function(results) {
+            const cursos = results.data;
             const tbody = document.querySelector('#curso-table tbody');
+            const categoriaFilter = document.getElementById('categoria-filter');
+            const categorias = new Set(); // Usar um Set para evitar duplicados
+
             tbody.innerHTML = ''; // Limpa as linhas existentes
 
-            entries.forEach(entry => {
+            cursos.forEach(curso => {
+                // Popula a tabela
                 const row = document.createElement('tr');
-                const nome = entry.gsx$nome.$t;
-                const instituicao = entry.gsx$instituicao.$t;
-                const categoria = entry.gsx$categoria.$t;
-                const cargaHoraria = entry.gsx$cargahoraria.$t;
-                const concluidoEm = entry.gsx$concluidoem.$t;
-
                 row.innerHTML = `
-                    <td>${nome}</td>
-                    <td>${instituicao}</td>
-                    <td>${categoria}</td>
-                    <td>${cargaHoraria}</td>
-                    <td>${concluidoEm}</td>
-                    <td><button class="btn-certificado" onclick="verCertificado('${nome}')">Ver Certificado</button></td>
+                    <td>${curso['Título do livro']}</td>
+                    <td>${curso['Autor']}</td>
+                    <td>${curso['Categoria']}</td>
+                    <td>${curso['Data da leitura']}</td>
                 `;
-
                 tbody.appendChild(row);
-            });
-        }
 
-        fetchData(); // Chama a função ao carregar a página
+                // Adiciona a categoria ao conjunto
+                if (curso['Categoria']) {
+                    categorias.add(curso['Categoria'].trim());
+                }
+            });
+
+            // Popula o filtro de categorias
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria;
+                categoriaFilter.appendChild(option);
+            });
+        },
+        error: function(error) {
+            console.error('Erro ao carregar Google Sheets:', error);
+        }
+    });
+}
+
+        // Chama a função para carregar os dados quando a página for carregada
+        window.onload = carregarCursos;
+
+
     </script>
 
 </body>
