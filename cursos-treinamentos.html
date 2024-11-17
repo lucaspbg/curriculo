@@ -48,6 +48,11 @@
             margin-bottom: 20px;
         }
 
+        #categoria-filter{
+            min-width: 300px;
+        }
+
+
         /* Estilo da Tabela */
         table {
             width: 100%;
@@ -154,9 +159,6 @@
             <label for="categoria-filter">Filtrar por Categoria:</label>
             <select id="categoria-filter" onchange="filterTable()">
                 <option value="">Todas</option>
-                <option value="Combate ao uso de entorpecentes">Combate ao uso de entorpecentes</option>
-                <option value="Segurança Pública">Segurança Pública</option>
-                <option value="Tecnologia">Tecnologia</option>
             </select>
         </div>
 
@@ -213,18 +215,6 @@
 
         }
 
-        // Função para ordenar a tabela por data (coluna "Concluído em")
-        function sortTable() {
-            const table = document.getElementById("curso-table");
-            const rows = Array.from(table.rows).slice(1); // Pula a primeira linha de cabeçalho
-            const sortedRows = rows.sort((rowA, rowB) => {
-                const dateA = new Date(rowA.cells[4].textContent); // Coluna "Concluído em"
-                const dateB = new Date(rowB.cells[4].textContent);
-                return dateA - dateB; // Ordena por data
-            });
-
-            sortedRows.forEach(row => table.appendChild(row)); // Reaplica as linhas ordenadas
-        }
 
         // Função para filtrar a tabela por categoria
         function filterTable() {
@@ -245,41 +235,58 @@
 
         // Função para exibir o certificado
         function verCertificado(certificado) {
-            window.open('certificados/' + certificado, '_blank');
+            window.open('certificados/' + certificado + '.pdf', '_blank');
         }
 
-        // Caminho do arquivo CSV
-        const csvFilePath = 'cursos.csv'; // Altere o nome se necessário
 
-        // Função para carregar o CSV e preencher a tabela
         function carregarCursos() {
-            Papa.parse(csvFilePath, {
-                download: true,
-                header: true, // Considera a primeira linha como cabeçalho
-                complete: function(results) {
-                    const cursos = results.data;
-                    const tbody = document.querySelector('#curso-table tbody');
-                    tbody.innerHTML = ''; // Limpa as linhas existentes
+    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?output=csv';
 
-                    cursos.forEach(curso => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${curso['Nome do curso/treinamento']}</td>
-                            <td>${curso['Instituição']}</td>
-                            <td>${curso['Categoria']}</td>
-                            <td>${curso['Carga horária']}</td>
-                            <td>${curso['Concluído em']}</td>
-                            <td><button class="btn-certificado" onclick="verCertificado('${curso['Certificado']}')">Ver Certificado</button></td>
+    Papa.parse(googleSheetUrl, {
+        download: true,
+        header: true, // Usa a primeira linha como cabeçalho
+        complete: function(results) {
+            const cursos = results.data;
+            const tbody = document.querySelector('#curso-table tbody');
+            const categoriaFilter = document.getElementById('categoria-filter');
+            const categorias = new Set(); // Usar um Set para evitar duplicados
 
-                        `;
-                        tbody.appendChild(row);
-                    });
-                },
-                error: function(error) {
-                    console.error('Erro ao carregar CSV:', error);
+            tbody.innerHTML = ''; // Limpa as linhas existentes
+
+            cursos.forEach(curso => {
+                // Popula a tabela
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${curso['Nome do curso/treinamento']}</td>
+                    <td>${curso['Instituição']}</td>
+                    <td>${curso['Categoria']}</td>
+                    <td>${curso['Carga horária']}</td>
+                    <td>${curso['Concluído em']}</td>
+                    <td><button class="btn-certificado" onclick="verCertificado('${curso['Certificado']}')">Ver Certificado</button></td>
+                `;
+                tbody.appendChild(row);
+
+                // Adiciona a categoria ao conjunto
+                if (curso['Categoria']) {
+                    categorias.add(curso['Categoria'].trim());
                 }
             });
+
+            // Popula o filtro de categorias
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria;
+                categoriaFilter.appendChild(option);
+            });
+        },
+        error: function(error) {
+            console.error('Erro ao carregar Google Sheets:', error);
         }
+    });
+}
+
+
 
         // Chama a função para carregar os dados quando a página for carregada
         window.onload = carregarCursos;
