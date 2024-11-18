@@ -1,0 +1,109 @@
+
+    <style>
+
+        /* Barra de Menu */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: inline-block;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            padding: 12px 20px;
+        }
+
+        .navbar.responsive .menu-toggle {
+            display: block;
+        }
+
+        .navbar.responsive a {
+            display: block;
+            text-align: left;
+        }
+
+        /* Estilo do botão de menu toggle */
+        .menu-toggle {
+            display: none; /* Inicialmente oculto */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            z-index: 1000;
+        }
+
+        /* Responsividade */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: -400px; /* Menu fora da tela à esquerda */
+                width: 350px;
+                height: 100%;
+                background-color: #333;
+                overflow-y: auto;
+                transition: left 0.3s ease-in-out; /* Animação de entrada/saída */
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                padding-top: 100px;
+            }
+
+            .navbar.active {
+                left: 0; /* Traz o menu para dentro da tela */
+            }
+
+            .menu-toggle {
+                display: block; /* Exibe o botão toggle */
+                background-color: #333;
+                padding: 10px 15px;
+                top: 15px;
+                border-radius: 5px;
+            }
+
+            .navbar a {
+                padding: 10px 20px;
+                text-align: left;
+                border-bottom: 1px solid #444;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Botão de Toggle -->
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <!-- Barra de Navegação -->
+    <div class="navbar">
+        <a id="curriculoButton" href="index">Currículo</a>
+        <a id="videoButton" href="video">Vídeo</a>
+        <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
+        <a id="leiturasButton" href="leituras">Leitura de Livros</a>
+    </div>
+
+    <script>
+
+</script>
+
+</body>
+

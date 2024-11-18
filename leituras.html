@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-   
+    <script src="menu.js"></script>
+
+
     <title>Leituras</title>
     <style>
         /* Estilo geral da página */
@@ -16,42 +18,6 @@
             background-color: #f4f4f4;
         }
 
-        /* Barra de Menu */
-        .navbar {
-            background-color: #333;
-            overflow: hidden;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            display: inline-block;
-            font-size: 18px;
-        }
-
-        .navbar a:hover {
-            background-color: #575757;
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            padding: 12px 20px;
-        }
-
-        .navbar.responsive .menu-toggle {
-            display: block;
-        }
-
-        .navbar.responsive a {
-            display: block;
-            text-align: left;
-        }
 
         /* Estilização do Container */
         .container {
@@ -120,66 +86,12 @@
             border-radius: 4px;
         }
 
-        /* Botão do Certificado */
-        .btn-certificado {
-            padding: 6px 12px;
-            background-color: #013266;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn-certificado:hover {
-            background-color: #003e80;
-        }
-
-        /* Estilo do botão de menu toggle */
-        .menu-toggle {
-            display: none; /* Inicialmente oculto */
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-            z-index: 1000;
-        }
 
         /* Responsividade */
         @media screen and (max-width: 768px) {
-            .navbar {
-                position: fixed;
-                top: 0;
-                left: -400px; /* Menu fora da tela à esquerda */
-                width: 350px;
-                height: 100%;
-                background-color: #333;
-                overflow-y: auto;
-                transition: left 0.3s ease-in-out; /* Animação de entrada/saída */
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                padding-top: 100px;
-            }
 
-            .navbar.active {
-                left: 0; /* Traz o menu para dentro da tela */
-            }
 
-            .menu-toggle {
-                display: block; /* Exibe o botão toggle */
-                background-color: #333;
-                padding: 10px 15px;
-                top: 15px;
-                border-radius: 5px;
-            }
 
-            .navbar a {
-                padding: 10px 20px;
-                text-align: left;
-                border-bottom: 1px solid #444;
-            }
         }
 
     </style>
@@ -187,16 +99,10 @@
 <body>
 
 
-    <!-- Botão de Toggle -->
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    
+    <!-- Contêiner onde o menu será carregado -->
+    <div id="menu-container"></div>
 
-    <!-- Barra de Navegação -->
-    <div class="navbar">
-        <a id="curriculoButton" href="/curriculo">Currículo</a>
-        <a id="videoButton" href="video">Vídeo</a>
-        <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
-        <a id="leiturasButton" href="leituras">Leitura de Livros</a>
-    </div>
 
     <div class="container">
         <h1>Lista de Leituras</h1>
@@ -229,84 +135,69 @@
 
     <script>
 
-        // Responsividade do Menu
-        function toggleMenu() {
-        const navbar = document.querySelector('.navbar');
-        navbar.classList.toggle('active');
-}
+            // Função para carregar o menu dinamicamente
+            async function loadMenu() {
+            const menuContainer = document.getElementById('menu-container');
+            try {
+                const response = await fetch('menu.html'); // Carrega o arquivo HTML do menu
+                const menuHTML = await response.text();
+                menuContainer.innerHTML = menuHTML;
 
-// Inicializar a ordem de classificação na abertura da página
-document.addEventListener("DOMContentLoaded", () => {
-    const table = document.getElementById("curso-table");
-    if (!table.dataset.sortOrder) {
-        table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
-    }
-});
+                // Inicializa as funções do menu após carregá-lo
+                setupMenu();
 
-// Função para ordenar a tabela pela coluna "Concluído em"
-function sortTable() {
-    const table = document.getElementById("curso-table");
-    const rows = Array.from(table.rows).slice(1);
-    const index = 3; // Coluna "Concluído em"
-    let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+                // Ativa o botão toggle, garantindo que funcione após o carregamento
+                const toggleButton = document.createElement('div');
+                toggleButton.className = 'menu-toggle';
+                toggleButton.innerText = '☰';
+                toggleButton.onclick = toggleMenu;
+                menuContainer.prepend(toggleButton);
+            } catch (error) {
+                console.error('Erro ao carregar o menu:', error);
+            }
+        }
 
-    rows.sort((a, b) => {
-        const aDate = parseDate(a.cells[index].innerText);
-        const bDate = parseDate(b.cells[index].innerText);
+        // Chamada para carregar o menu
+        loadMenu();
 
-        return isAsc ? aDate - bDate : bDate - aDate;
-    });
 
-    rows.forEach(row => table.tBodies[0].appendChild(row));
-    table.dataset.sortOrder = isAsc ? "asc" : "desc";
-}
+        // Inicializar a ordem de classificação na abertura da página
+        document.addEventListener("DOMContentLoaded", () => {
+            const table = document.getElementById("curso-table");
+            if (!table.dataset.sortOrder) {
+                table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
+            }
+        });
 
-// Função para converter datas no formato "MM/YYYY" para objetos Date
-function parseDate(dateStr) {
-    const [month, year] = dateStr.split("/").map(Number);
-    return new Date(year, month - 1);
-}
+        // Função para ordenar a tabela pela coluna "Concluído em"
+        function sortTable() {
+            const table = document.getElementById("curso-table");
+            const rows = Array.from(table.rows).slice(1);
+            const index = 3; // Coluna "Concluído em"
+            let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+
+            rows.sort((a, b) => {
+                const aDate = parseDate(a.cells[index].innerText);
+                const bDate = parseDate(b.cells[index].innerText);
+
+                return isAsc ? aDate - bDate : bDate - aDate;
+            });
+
+            rows.forEach(row => table.tBodies[0].appendChild(row));
+            table.dataset.sortOrder = isAsc ? "asc" : "desc";
+        }
+
+        // Função para converter datas no formato "MM/YYYY" para objetos Date
+        function parseDate(dateStr) {
+            const [month, year] = dateStr.split("/").map(Number);
+            return new Date(year, month - 1);
+        }
 
 
         // Função para converter "MM/YYYY" em um objeto Date
         function parseDate(dateStr) {
             const [month, year] = dateStr.split('/').map(Number);
             return new Date(year, month - 1); // Mês começa em 0 (janeiro é 0)
-        }
-
-
-
-        // Capturar o parâmetro de hash na URL
-        const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
-        const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
-
-        // Verificar se o parâmetro foi passado
-        if (param) {
-            // Atualizar o link do botão "Currículo"
-            const curriculoButton = document.getElementById("curriculoButton");
-            if (curriculoButton) {
-                curriculoButton.href = "/curriculo?" + "param=" + param; // Definir o link com o hash
-                
-            }
-
-            const videoButton = document.getElementById("videoButton");
-            if (videoButton) {
-                videoButton.href = "video#" + "param=" + param; // Definir o link com o hash
-                
-            }
-
-            const cursosButton = document.getElementById("cursosButton");
-            if (cursosButton) {
-                cursosButton.href = "cursos-treinamentos#" + "param=" + param; // Definir o link com o hash
-                
-            }
-            
-            const leiturasButton = document.getElementById("leiturasButton");
-            if (leiturasButton) {
-                leiturasButton.href = "leituras#" + "param=" + param; // Definir o link com o hash
-                
-            }
-
         }
 
 
