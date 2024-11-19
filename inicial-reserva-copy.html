@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecionando...</title>
+    <script>
+
+        //const urlParams = new URLSearchParams(window.location.hash.substr(1)); // usa o hash (ex: #param=next-fit)
+        // Capturar o parâmetro da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const param = urlParams.get('param'); // Obtém o valor do parâmetro "param"
+
+        // Variável para armazenar o URL final do PDF
+        let pdfUrl = "";
+
+        // Lógica de redirecionamento baseada no valor do parâmetro
+        if (param === "next-fit") {
+            pdfUrl = "pdf/Next%20Fit.pdf";
+        } else if (param === "betah-sistemas") {
+            pdfUrl = "pdf/Betah%20Sistemas.pdf";
+        } else if (param === "empresa-x") {
+            pdfUrl = "pdf/Empresa%20X.pdf";
+        } else {
+            // Caso o parâmetro não corresponda a nenhuma empresa, usar PDF padrão
+            pdfUrl = "pdf/Curriculo.pdf";
+        }
+
+        // Exibir o URL final no console para depuração
+        console.log("URL do PDF:", pdfUrl);
+
+        // Redirecionar para o URL do PDF
+        window.location.href = pdfUrl;
+    </script>
+</head>
+<body>
+    <p>Redirecionando...</p>
+</body>
+</html>

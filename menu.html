@@ -19,6 +19,14 @@
 
         .navbar a:hover {
             background-color: #575757;
+            border-radius: 3px;
+        }
+ 
+        .navbar a.active {
+            background-color: #575757; /* Igual ao hover */
+            color: white; /* Opcional */
+            border-radius: 3px;
+            
         }
 
         .menu-toggle {
@@ -74,7 +82,7 @@
             .menu-toggle {
                 display: block; /* Exibe o botão toggle */
                 background-color: #333;
-                padding: 10px 15px;
+                padding: 0px 15px;
                 top: 15px;
                 border-radius: 5px;
             }
@@ -90,16 +98,16 @@
 </head>
 <body>
 
-    <!-- Botão de Toggle -->
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <!-- Botão de Toggle -->
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <!-- Barra de Navegação -->
-    <div class="navbar">
-        <a id="curriculoButton" href="index">Currículo</a>
-        <a id="videoButton" href="video">Vídeo</a>
-        <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
-        <a id="leiturasButton" href="leituras">Leitura de Livros</a>
-    </div>
+        <!-- Barra de Navegação -->
+        <div class="navbar">
+            <a id="curriculoButton" href="index">Currículo</a>
+            <a id="videoButton" href="video">Vídeo</a>
+            <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
+            <a id="leiturasButton" href="leituras">Leitura de Livros</a>
+        </div>
 
     <script>
 

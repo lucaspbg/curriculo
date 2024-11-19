@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="menu.js"></script>
+ 
 
 
     <title>Leituras</title>
@@ -16,14 +16,21 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+                        
         }
-
 
         /* Estilização do Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            
+        }
+
+        #menu-container{
+        height: 65px;
+        background-color: #333;
+
         }
 
         h1 {
@@ -42,6 +49,7 @@
 
         /* Estilo da Tabela */
         table {
+            table-layout: fixed; /* As larguras das colunas são definidas pelo CSS */
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
@@ -54,21 +62,55 @@
             padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
+
         }
 
         th {
             background-color: #333;
             color: white;
             cursor: pointer;
+            
         }
 
         td {
             background-color: #f9f9f9;
+           
         }
 
         tr:nth-child(even) td {
             background-color: #f2f2f2;
         }
+   
+        td:nth-child(4),
+        th:nth-child(4),
+        td:nth-child(5),
+        th:nth-child(5),
+        td:nth-child(6),
+        th:nth-child(6) {
+            text-align: center;
+        }
+
+        /* Spinner: Efeito de carregamento */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #c2c2c2; /* Cor clara */
+            border-top: 5px solid #333; /* Cor do spinner */
+            border-left: 5px solid #333;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: auto; /* Centralizar */
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
 
         /* Estilo do filtro */
         .filter-container {
@@ -86,11 +128,59 @@
             border-radius: 4px;
         }
 
+        /* Botão do Certificado */
+        .btn-certificado {
+            padding: 6px 12px;
+            background-color: #013266;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-certificado:hover {
+            background-color: #003e80;
+        }
+
 
         /* Responsividade */
         @media screen and (max-width: 768px) {
 
+        table {
+            table-layout: auto; /* As larguras das colunas são definidas pelo CSS */
+            
+        }
 
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .btn-certificado {
+            padding: 3px 6px;
+            font-size: 10px;
+        }
+        
+        .filter-container label {
+            font-size: 12px;
+        }
+
+        label[for="categoria-filter"] {
+        display: inline-block;
+        padding-bottom: 8px;
+        }
+
+        .filter-container select {
+            font-size: 14px;
+
+        }
+
+        h1{
+            font-size: 18px;
+
+        }
 
         }
 
@@ -102,6 +192,12 @@
     
     <!-- Contêiner onde o menu será carregado -->
     <div id="menu-container"></div>
+
+    <script type="module">
+        import { loadMenu } from './menu.js';
+        // Carregar o menu no elemento
+        loadMenu('#menu-container');
+    </script>
 
 
     <div class="container">
@@ -117,6 +213,13 @@
 
         <!-- Tabela de Cursos e Treinamentos -->
         <table id="curso-table">
+            <colgroup>
+                <col style="width: 20%;"> <!-- Título do livro -->
+                <col style="width: 16%;"> <!-- Autor -->
+                <col style="width: 18%;"> <!-- Categoria -->
+                <col style="width: 10%;"> <!-- Data da leitura -->
+
+            </colgroup>
             <thead>
                 <tr>
                     <th>Título do livro</th>
@@ -127,38 +230,14 @@
                 </tr>
             </thead>
             <tbody>
-             
-
+                <td colspan="4" style="text-align: center; border-color: #f4f4f4; padding-top: 50px; background-color: #f4f4f4;">
+                    <div class="spinner"></div> 
+                </td>
             </tbody>
         </table>
     </div>
 
     <script>
-
-            // Função para carregar o menu dinamicamente
-            async function loadMenu() {
-            const menuContainer = document.getElementById('menu-container');
-            try {
-                const response = await fetch('menu.html'); // Carrega o arquivo HTML do menu
-                const menuHTML = await response.text();
-                menuContainer.innerHTML = menuHTML;
-
-                // Inicializa as funções do menu após carregá-lo
-                setupMenu();
-
-                // Ativa o botão toggle, garantindo que funcione após o carregamento
-                const toggleButton = document.createElement('div');
-                toggleButton.className = 'menu-toggle';
-                toggleButton.innerText = '☰';
-                toggleButton.onclick = toggleMenu;
-                menuContainer.prepend(toggleButton);
-            } catch (error) {
-                console.error('Erro ao carregar o menu:', error);
-            }
-        }
-
-        // Chamada para carregar o menu
-        loadMenu();
 
 
         // Inicializar a ordem de classificação na abertura da página
@@ -185,12 +264,6 @@
 
             rows.forEach(row => table.tBodies[0].appendChild(row));
             table.dataset.sortOrder = isAsc ? "asc" : "desc";
-        }
-
-        // Função para converter datas no formato "MM/YYYY" para objetos Date
-        function parseDate(dateStr) {
-            const [month, year] = dateStr.split("/").map(Number);
-            return new Date(year, month - 1);
         }
 
 
@@ -248,6 +321,7 @@
                     <td>${curso['Data da leitura']}</td>
                 `;
                 tbody.appendChild(row);
+                
 
                 // Adiciona a categoria ao conjunto
                 if (curso['Categoria']) {
@@ -262,6 +336,13 @@
                 option.textContent = categoria;
                 categoriaFilter.appendChild(option);
             });
+
+            sortTable();
+
+            // Remover o spinner após os cursos serem carregados
+            const spinner = document.querySelector('.spinner');
+            spinner.style.display = 'none';
+
         },
         error: function(error) {
             console.error('Erro ao carregar Google Sheets:', error);
