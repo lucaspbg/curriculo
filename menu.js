@@ -16,7 +16,15 @@ export async function loadMenu(containerSelector) {
             toggleButton.addEventListener('click', toggleMenu);
         }
 
+        const toggleButton_x = container.querySelector('.menu-toggle-x');
+        if (toggleButton_x) {
+            toggleButton_x.addEventListener('click', toggleMenu);
+        }
 
+        const overlay = container.querySelector('.menu-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', toggleMenu);
+        }        
         
     } catch (error) {
         console.error('Erro ao carregar o menu:', error);
@@ -25,7 +33,17 @@ export async function loadMenu(containerSelector) {
 
 function toggleMenu() {
     const navbar = document.querySelector('.navbar');
+    const overlay = document.querySelector('.menu-overlay');
+
+    // Alterna o estado ativo do menu
     navbar.classList.toggle('active');
+
+    // Exibe/esconde o overlay com base no estado do menu
+    if (navbar.classList.contains('active')) {
+        overlay.style.display = 'block';
+    } else {
+        overlay.style.display = 'none';
+    }
 }
 
 function setupMenu() {

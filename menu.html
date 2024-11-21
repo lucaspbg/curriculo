@@ -1,4 +1,8 @@
 
+  <head>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  
     <style>
 
         /* Barra de Menu */
@@ -7,6 +11,7 @@
             overflow: hidden;
             text-align: center;
             padding: 10px 0;
+
         }
 
         .navbar a {
@@ -55,8 +60,26 @@
             font-size: 24px;
             cursor: pointer;
             color: white;
-            z-index: 1000;
+           
+           
         }
+
+        .menu-toggle-x {
+            display: none; /* Inicialmente oculto */
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            z-index: 1000;
+           
+        }
+
+        .menu-overlay {
+            display: none;
+        }
+
 
         /* Responsividade */
         @media screen and (max-width: 768px) {
@@ -64,7 +87,7 @@
                 position: fixed;
                 top: 0;
                 left: -400px; /* Menu fora da tela à esquerda */
-                width: 350px;
+                width: 250px;
                 height: 100%;
                 background-color: #333;
                 overflow-y: auto;
@@ -72,7 +95,8 @@
                 display: flex;
                 flex-direction: column;
                 padding: 20px;
-                padding-top: 100px;
+                padding-top: 80px;
+                z-index: 1000;
             }
 
             .navbar.active {
@@ -87,11 +111,30 @@
                 border-radius: 5px;
             }
 
+            .menu-toggle-x {
+                display: block; /* Exibe o botão toggle */
+
+            }
+
             .navbar a {
                 padding: 10px 20px;
                 text-align: left;
                 border-bottom: 1px solid #444;
             }
+
+            .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.897); /* Fundo semi-transparente */
+            z-index: 999; /* Atrás do menu, mas acima do conteúdo */
+            display: none; /* Oculto por padrão */
+            }
+
+
+
         }
 
     </style>
@@ -103,15 +146,20 @@
 
         <!-- Barra de Navegação -->
         <div class="navbar">
+
+            <div class="menu-toggle-x" onclick="toggleMenu()"><i class="fas fa-times"></i></div>
             <a id="curriculoButton" href="index">Currículo</a>
             <a id="videoButton" href="video">Vídeo</a>
             <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>
             <a id="leiturasButton" href="leituras">Leitura de Livros</a>
         </div>
 
+        <!-- Overlay -->
+        <div class="menu-overlay" onclick="toggleMenu()"></div>
+
     <script>
 
-</script>
+    </script>
 
 </body>
 
