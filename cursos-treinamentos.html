@@ -42,7 +42,9 @@
 
         /* Tabela Responsiva */
         .table-wrapper {
-            overflow-x: auto;
+        overflow-x: auto; /* Cria o scroll horizontal quando necessário */
+        width: 100%; /* Garante que o contêiner ocupe a largura total */
+        margin-bottom: 20px; /* Espaçamento abaixo do contêiner */
         }
 
         /* Estilo da Tabela */
@@ -143,29 +145,22 @@
         /* Responsividade */
         @media screen and (max-width: 768px) {
 
-        #menu-container{
-        height: 65px;
-        width: 100vh;
-        background-color: #333;
-
-        }
-
-
         table {
-            table-layout: auto; /* As larguras das colunas são definidas pelo CSS */
-            
+            width: 100%;
+            min-width: 600px; /* Define um limite mínimo para largura da tabela */
+            table-layout: auto; /* Ajusta a largura automaticamente */
         }
 
 
         th, td {
             padding: 5px;
             text-align: left;
-            font-size: 10px;
+            font-size: 12px;
         }
 
         .btn-certificado {
             padding: 3px 6px;
-            font-size: 10px;
+            font-size: 12px;
         }
         
         .filter-container label {
@@ -216,33 +211,33 @@
         </div>
 
         <!-- Tabela de Cursos e Treinamentos -->
-        <table id="curso-table">
-            <colgroup>
-                <col style="width: 18%;"> <!-- Nome do curso -->
-                <col style="width: 16%;"> <!-- Instituição -->
-                <col style="width: 18%;"> <!-- Categoria -->
-                <col style="width: 10%;"> <!-- Carga horária -->
-                <col style="width: 12%;"> <!-- Concluído em -->
-                <col style="width: 12%;"> <!-- Ação -->
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Nome do curso/treinamento</th>
-                    <th>Instituição</th>
-                    <th>Categoria</th>
-                    <th>Carga horária</th>
-                    <th onclick="sortTable()">Concluído<br>em ▲▼</th> <!-- Ordenação -->
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>             
-                <td colspan="6" style="text-align: center; border-color: #f4f4f4; padding-top: 50px; background-color: #f4f4f4;">
-                    <div class="spinner"></div> 
-                </td>
 
-            </tbody>
-        </table>
-    </div>
+<div class="table-wrapper">
+    <table id="curso-table">
+        <colgroup>
+            <col style="width: 18%;"> <!-- Nome do curso -->
+            <col style="width: 16%;"> <!-- Instituição -->
+            <col style="width: 18%;"> <!-- Categoria -->
+            <col style="width: 10%;"> <!-- Carga horária -->
+            <col style="width: 12%;"> <!-- Concluído em -->
+            <col style="width: 12%;"> <!-- Ação -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Nome do curso/treinamento</th>
+                <th>Instituição</th>
+                <th>Categoria</th>
+                <th>Carga horária</th>
+                <th onclick="sortTable()">Concluído<br>em ▲▼</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Conteúdo da tabela -->
+        </tbody>
+    </table>
+</div>
+
 
     <script>
 

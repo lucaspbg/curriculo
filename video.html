@@ -21,6 +21,8 @@
             text-align: center; /* Centraliza o conteúdo */
         }
 
+
+
         #menu-container {
             height: 65px;
             background-color: #333;
@@ -58,6 +60,16 @@
                 transform: rotate(360deg);
             }
         }
+
+
+        @media screen and (max-width: 768px) {
+
+            .video{
+                width: 95%;
+            }
+
+
+        }    
 
 
 
@@ -133,7 +145,7 @@
         function exibirVideo(videoSrc) {
             const videoContainer = document.getElementById('video-container');
             videoContainer.innerHTML = `
-                <video controls>
+                <video controls class="video">
                     <source src="${videoSrc}" type="video/mp4">
                     Seu navegador não suporta vídeos.
                 </video>`;

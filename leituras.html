@@ -42,9 +42,10 @@
             min-width: 300px;
         }
 
-        /* Tabela Responsiva */
         .table-wrapper {
-            overflow-x: auto;
+        overflow-x: auto; /* Cria o scroll horizontal quando necessário */
+        width: 100%; /* Garante que o contêiner ocupe a largura total */
+        margin-bottom: 20px; /* Espaçamento abaixo do contêiner */
         }
 
         /* Estilo da Tabela */
@@ -147,15 +148,15 @@
         @media screen and (max-width: 768px) {
 
         table {
-            table-layout: auto; /* As larguras das colunas são definidas pelo CSS */
-            
+            width: 100%;
+            min-width: 600px; /* Define um limite mínimo para largura da tabela */
+            table-layout: auto; /* Ajusta a largura automaticamente */
         }
-
 
         th, td {
             padding: 5px;
             text-align: left;
-            font-size: 10px;
+            font-size: 12px;
         }
 
         .btn-certificado {
@@ -212,6 +213,7 @@
         </div>
 
         <!-- Tabela de Cursos e Treinamentos -->
+    <div class="table-wrapper"> 
         <table id="curso-table">
             <colgroup>
                 <col style="width: 20%;"> <!-- Título do livro -->
