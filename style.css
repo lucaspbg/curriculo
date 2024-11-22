@@ -1,0 +1,213 @@
+:root{
+    --pimary: #333;
+    --secundary: #ffffff;
+    
+}
+
+/*Espaçamento do menu*/
+#menu-container{
+    height: 65px;
+    background-color: #333; 
+    width: 100%;   
+}
+
+/* Estilo geral da página */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+                
+}
+
+/* Estilização do Container */
+.container {
+    max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center; /* Centraliza o conteúdo */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilo da Tabela */
+.table-wrapper {
+overflow-x: auto; /* Cria o scroll horizontal quando necessário */
+width: 100%; /* Garante que o contêiner ocupe a largura total */
+margin-bottom: 20px; /* Espaçamento abaixo do contêiner */
+
+
+}
+
+
+table {
+    table-layout: fixed; /* As larguras das colunas são definidas pelo CSS */
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #ddd;
+    border: 1px solid;
+    border-radius: 10px;    
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    
+}
+
+td {
+    background-color: #f9f9f9;
+   
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+
+td:nth-child(4),
+th:nth-child(4),
+td:nth-child(5),
+th:nth-child(5),
+td:nth-child(6),
+th:nth-child(6) {
+    text-align: center;
+}
+
+
+.spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estilo do filtro */
+.filter-container {
+    margin-bottom: 20px;
+}
+
+.filter-container label {
+    font-weight: bold;
+}
+
+.filter-container select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#categoria-filter{
+    min-width: 300px;
+}
+/* Botão do Certificado */
+.btn-certificado {
+    padding: 6px 12px;
+    background-color: #013266;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-certificado:hover {
+    background-color: #003e80;
+}
+
+/*Vídeo*/
+.video{
+
+    border-radius: 10px;
+}
+
+iframe {
+width: 80%; /* Torna responsivo */
+max-width: 560px;
+height: 315px;
+border: none;
+}
+
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+
+table {
+    width: 100%;
+    min-width: 600px; /* Define um limite mínimo para largura da tabela */
+    table-layout: auto; /* Ajusta a largura automaticamente */
+}
+
+th, td {
+    padding: 5px;
+    text-align: left;
+    font-size: 12px;
+}
+
+.btn-certificado {
+    padding: 3px 6px;
+    font-size: 10px;
+}
+
+.filter-container label {
+    font-size: 12px;
+}
+
+label[for="categoria-filter"] {
+display: inline-block;
+padding-bottom: 8px;
+}
+
+.filter-container select {
+    font-size: 14px;
+
+}
+
+h1{
+    font-size: 18px;
+
+}
+
+/*Vídeo*/
+.video{
+    width: 98%;
+    border-radius: 10px;
+}
+
+}
+

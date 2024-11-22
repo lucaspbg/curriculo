@@ -7,199 +7,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
  
 
-
     <title>Leituras</title>
-    <style>
-        /* Estilo geral da página */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-                        
-        }
 
-        /* Estilização do Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            
-        }
-
-        #menu-container{
-        height: 65px;
-        background-color: #333;
-
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #categoria-filter{
-            min-width: 300px;
-        }
-
-        .table-wrapper {
-        overflow-x: auto; /* Cria o scroll horizontal quando necessário */
-        width: 100%; /* Garante que o contêiner ocupe a largura total */
-        margin-bottom: 20px; /* Espaçamento abaixo do contêiner */
-        }
-
-        /* Estilo da Tabela */
-        table {
-            table-layout: fixed; /* As larguras das colunas são definidas pelo CSS */
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: #fff;
-            border-radius: 10px; /* Raio da borda */
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-
-        }
-
-        th {
-            background-color: #333;
-            color: white;
-            cursor: pointer;
-            
-        }
-
-        td {
-            background-color: #f9f9f9;
-           
-        }
-
-        tr:nth-child(even) td {
-            background-color: #f2f2f2;
-        }
-   
-        td:nth-child(4),
-        th:nth-child(4),
-        td:nth-child(5),
-        th:nth-child(5),
-        td:nth-child(6),
-        th:nth-child(6) {
-            text-align: center;
-        }
-
-        /* Spinner: Efeito de carregamento */
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #c2c2c2; /* Cor clara */
-            border-top: 5px solid #333; /* Cor do spinner */
-            border-left: 5px solid #333;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin: auto; /* Centralizar */
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-
-        /* Estilo do filtro */
-        .filter-container {
-            margin-bottom: 20px;
-        }
-
-        .filter-container label {
-            font-weight: bold;
-        }
-
-        .filter-container select {
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        /* Botão do Certificado */
-        .btn-certificado {
-            padding: 6px 12px;
-            background-color: #013266;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn-certificado:hover {
-            background-color: #003e80;
-        }
-
-
-        /* Responsividade */
-        @media screen and (max-width: 768px) {
-
-        table {
-            width: 100%;
-            min-width: 600px; /* Define um limite mínimo para largura da tabela */
-            table-layout: auto; /* Ajusta a largura automaticamente */
-        }
-
-        th, td {
-            padding: 5px;
-            text-align: left;
-            font-size: 12px;
-        }
-
-        .btn-certificado {
-            padding: 3px 6px;
-            font-size: 10px;
-        }
-        
-        .filter-container label {
-            font-size: 12px;
-        }
-
-        label[for="categoria-filter"] {
-        display: inline-block;
-        padding-bottom: 8px;
-        }
-
-        .filter-container select {
-            font-size: 14px;
-
-        }
-
-        h1{
-            font-size: 18px;
-
-        }
-
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
 
-
+    <div class="spinner-overlay" id="spinner">
+        <div class="spinner">            
+        </div>
+    </div>
     
     <!-- Contêiner onde o menu será carregado -->
-    <div id="menu-container"></div>
+    <div id="menu-container">
 
     <script type="module">
-        import { loadMenu } from './menu.js';
+        import { loadMenu } from './menu.js';        
         // Carregar o menu no elemento
         loadMenu('#menu-container');
     </script>
-
+    </div>
 
     <div class="container">
         <h1>Lista de Leituras</h1>
@@ -212,9 +40,9 @@
             </select>
         </div>
 
-        <!-- Tabela de Cursos e Treinamentos -->
+        <!-- Tabela de leituras e Treinamentos -->
     <div class="table-wrapper"> 
-        <table id="curso-table">
+        <table id="leitura-table">
             <colgroup>
                 <col style="width: 20%;"> <!-- Título do livro -->
                 <col style="width: 16%;"> <!-- Autor -->
@@ -232,9 +60,7 @@
                 </tr>
             </thead>
             <tbody>
-                <td colspan="4" style="text-align: center; border-color: #f4f4f4; padding-top: 50px; background-color: #f4f4f4;">
-                    <div class="spinner"></div> 
-                </td>
+                    <!-- Conteúdo da tabela -->
             </tbody>
         </table>
     </div>
@@ -244,7 +70,7 @@
 
         // Inicializar a ordem de classificação na abertura da página
         document.addEventListener("DOMContentLoaded", () => {
-            const table = document.getElementById("curso-table");
+            const table = document.getElementById("leitura-table");
             if (!table.dataset.sortOrder) {
                 table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
             }
@@ -252,7 +78,7 @@
 
         // Função para ordenar a tabela pela coluna "Concluído em"
         function sortTable() {
-            const table = document.getElementById("curso-table");
+            const table = document.getElementById("leitura-table");
             const rows = Array.from(table.rows).slice(1);
             const index = 3; // Coluna "Concluído em"
             let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
@@ -279,7 +105,7 @@
         // Função para filtrar a tabela por categoria
         function filterTable() {
             const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('#curso-table tbody tr');
+            const rows = document.querySelectorAll('#leitura-table tbody tr');
 
             rows.forEach(row => {
                 const categoryCell = row.cells[2]; // Coluna "Categoria"
@@ -299,35 +125,35 @@
         }
 
 
-    function carregarCursos() {
+    function carregarleituras() {
     const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=707712600&output=csv';
 
     Papa.parse(googleSheetUrl, {
         download: true,
         header: true, // Usa a primeira linha como cabeçalho
         complete: function(results) {
-            const cursos = results.data;
-            const tbody = document.querySelector('#curso-table tbody');
+            const leituras = results.data;
+            const tbody = document.querySelector('#leitura-table tbody');
             const categoriaFilter = document.getElementById('categoria-filter');
             const categorias = new Set(); // Usar um Set para evitar duplicados
 
             tbody.innerHTML = ''; // Limpa as linhas existentes
 
-            cursos.forEach(curso => {
+            leituras.forEach(leitura => {
                 // Popula a tabela
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${curso['Título do livro']}</td>
-                    <td>${curso['Autor']}</td>
-                    <td>${curso['Categoria']}</td>
-                    <td>${curso['Data da leitura']}</td>
+                    <td>${leitura['Título do livro']}</td>
+                    <td>${leitura['Autor']}</td>
+                    <td>${leitura['Categoria']}</td>
+                    <td>${leitura['Data da leitura']}</td>
                 `;
                 tbody.appendChild(row);
                 
 
                 // Adiciona a categoria ao conjunto
-                if (curso['Categoria']) {
-                    categorias.add(curso['Categoria'].trim());
+                if (leitura['Categoria']) {
+                    categorias.add(leitura['Categoria'].trim());
                 }
             });
 
@@ -341,19 +167,18 @@
 
             sortTable();
 
-            // Remover o spinner após os cursos serem carregados
-            const spinner = document.querySelector('.spinner');
-            spinner.style.display = 'none';
+            document.getElementById('spinner').style.display = 'none';
 
         },
         error: function(error) {
             console.error('Erro ao carregar Google Sheets:', error);
+            document.getElementById('spinner').style.display = 'none';
         }
     });
 }
 
         // Chama a função para carregar os dados quando a página for carregada
-        window.onload = carregarCursos;
+        window.onload = carregarleituras;
 
 
     </script>

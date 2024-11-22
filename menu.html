@@ -2,152 +2,19 @@
   <head>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  
-    <style>
 
-        /* Barra de Menu */
-        .navbar {
-            background-color: #333;
-            overflow: hidden;
-            text-align: center;
-            padding: 10px 0;
+    <link rel="stylesheet" href="menu.css">
 
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            display: inline-block;
-            font-size: 18px;
-        }
-
-        .navbar a:hover {
-            background-color: #575757;
-            border-radius: 3px;
-        }
- 
-        .navbar a.active {
-            background-color: #575757; /* Igual ao hover */
-            color: white; /* Opcional */
-            border-radius: 3px;
-            
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            padding: 12px 20px;
-        }
-
-        .navbar.responsive .menu-toggle {
-            display: block;
-        }
-
-        .navbar.responsive a {
-            display: block;
-            text-align: left;
-        }
-
-        /* Estilo do botão de menu toggle */
-        .menu-toggle {
-            display: none; /* Inicialmente oculto */
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-           
-           
-        }
-
-        .menu-toggle-x {
-            display: none; /* Inicialmente oculto */
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            font-size: 24px;
-            cursor: pointer;
-            color: white;
-            z-index: 1000;
-           
-        }
-
-        .menu-overlay {
-            display: none;
-        }
-
-
-        /* Responsividade */
-        @media screen and (max-width: 768px) {
-            .navbar {
-                position: fixed;
-                top: 0;
-                left: -400px; /* Menu fora da tela à esquerda */
-                width: 250px;
-                height: 100%;
-                background-color: #333;
-                overflow-y: auto;
-                transition: left 0.3s ease-in-out; /* Animação de entrada/saída */
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                padding-top: 80px;
-                z-index: 1000;
-            }
-
-            .navbar.active {
-                left: 0; /* Traz o menu para dentro da tela */
-            }
-
-            .menu-toggle {
-                display: block; /* Exibe o botão toggle */
-                background-color: #333;
-                padding: 0px 15px;
-                top: 15px;
-                border-radius: 5px;
-            }
-
-            .menu-toggle-x {
-                display: block; /* Exibe o botão toggle */
-
-            }
-
-            .navbar a {
-                padding: 10px 20px;
-                text-align: left;
-                border-bottom: 1px solid #444;
-            }
-
-            .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.897); /* Fundo semi-transparente */
-            z-index: 999; /* Atrás do menu, mas acima do conteúdo */
-            display: none; /* Oculto por padrão */
-            }
-
-
-
-        }
-
-    </style>
 </head>
 <body>
 
         <!-- Botão de Toggle -->
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        <div class="menu-toggle">☰</div>
 
         <!-- Barra de Navegação -->
         <div class="navbar">
 
-            <div class="menu-toggle-x" onclick="toggleMenu()"><i class="fas fa-times"></i></div>
+            <div class="menu-toggle-x"><i class="fas fa-times"></i></div>
             <a id="curriculoButton" href="index">Currículo</a>
             <a id="videoButton" href="video">Vídeo</a>
             <a id="cursosButton" href="cursos-treinamentos">Cursos e Treinamentos</a>

@@ -1,147 +1,191 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vídeo Apresentação</title>
-    <style>
-        /* Estilo geral da página */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+
+    <title>Currículo</title>
+
+    <link rel="stylesheet" href="style.css">
+
+        <style>
+        /* Estilos básicos */
+        .back-image {
+            background: url('img/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+
         }
 
-        /* Estilização do Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .back-image-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+
+        }
+
+        .container-curriculo {
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            overflow: hidden;
+            max-width: 800px;
+            width: 90%;
+            margin: auto;
+
+        }
+
+        @media (min-width: 768px) {
+            .container-curriculo {
+                flex-direction: row;
+                margin: auto;
+            }
+        }
+
+        .left, .right {
             padding: 20px;
-            text-align: center; /* Centraliza o conteúdo */
+            flex: 1;
+            color: #fff;
         }
 
-        #menu-container {
-            height: 65px;
-            background-color: #333;
+        .left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color, #333);
+            
+        }
+
+        .right {
+            background-color: var(--secondary-color, #555);
+        }
+
+
+        .left img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px;
         }
 
         h1 {
+            font-size: 24px;
+            margin: 10px 0;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        iframe {
-            width: 80%; /* Torna responsivo */
-            max-width: 560px;
-            height: 315px;
-            border: none;
+        p {
+            font-size: 16px;
+            margin: 10px 0;
         }
 
-        /* Spinner: Efeito de carregamento */
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #c2c2c2; /* Cor clara */
-            border-top: 5px solid #333; /* Cor do spinner */
-            border-left: 5px solid #333;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            margin: auto; /* Centralizar */
+        .button-container {
+            text-align: center;
         }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+        .button-container a {
+            display: inline-block;
+            background-color: var(--primary-color, #007BFF);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
 
-
-
+        .button-container a:hover {
+            background-color: var(--secondary-color, #0056b3);
+        }
     </style>
+
 </head>
 <body>
-    <!-- Contêiner onde o menu será carregado -->
-    <div id="menu-container"></div>
+    <div class="back-image">
+        <div class="back-image-overlay">
+            <!-- Contêiner onde o menu será carregado -->
+            <div id="menu-container">
 
-    <script type="module">
-        import { loadMenu } from './menu.js';
-        // Carregar o menu no elemento
-        loadMenu('#menu-container');
-    </script>
+            <script type="module">
+                import { loadMenu } from './menu.js';
+                // Carregar o menu no elemento
+                loadMenu('#menu-container');
+            </script>
+            </div>
+            
+            <div class="container-curriculo">
+                <div class="spinner-overlay" id="spinner">
+                    <div class="spinner">                        
+                    </div>
+                </div>
+                <!-- Quadrante esquerdo -->
+                <div class="left">
+                    <img src="img/lucas.jpg" alt="Foto do Lucas">
+                    <h1>Olá! Sou Lucas Pereira Borges</h1>
+                    <p>Estou em busca da próxima oportunidade de fazer a diferênça!</p>
+                </div>
+                <!-- Quadrante direito -->
+                <div class="right">
+                    <h1>Bem-vindo!</h1>
+                    <p>Navegue pelo site para explorar mais sobre meus projetos e experiências.</p>
+                    <div class="button-container" id="button-container">
+                    </div>
+                </div>
+            </div>
 
-    <div class="container">
-        <h1>Vídeo Apresentação</h1>
-        <!-- O vídeo será inserido aqui via JavaScript -->
-        <div id="video-container">
-            <!--p>Carregando o vídeo...</p-->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+            <script type="module">
+                import { loadMenu } from './menu.js';
+                
+                // Carregar o menu no contêiner
+                loadMenu('#menu-container');
+                
+                const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=660387765&output=csv';
 
-                <div class="spinner" style=" margin-top: 150px;"></div> 
-
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script>
-        const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=660387765&output=csv';
-
-        function getParamFromURL() {
-            const urlParams = new URLSearchParams(window.location.hash.substring(1));
-            return urlParams.get('param');
-        }
-
-        function carregarVideo(param) {
-            Papa.parse(googleSheetUrl, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    const dados = results.data;
-                    const videoInfo = dados.find(item => item.Param === param);
-
-                    let videoSrc;
-
-                    if (videoInfo) {
-                        const videoId = videoInfo.Vídeo.trim();
-                        videoSrc = `videos/${videoId}.mp4`;
-                    } else {
-                        videoSrc = 'videos/0.mp4'; // Vídeo padrão
-                    }
-
-                    // Verificar se o vídeo existe antes de exibi-lo
-                    fetch(videoSrc, { method: 'HEAD' })
-                        .then(response => {
-                            if (response.ok) {
-                                exibirVideo(videoSrc);
-                            } else {
-                                exibirVideo('videos/0.mp4'); // Vídeo padrão se o arquivo não existir
-                            }
-                        })
-                        .catch(() => {
-                            exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
-                        });
-                },
-                error: function(err) {
-                    console.error('Erro ao carregar a planilha:', err);
-                    exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
+                function getParamFromURL() {
+                    const urlParams = new URLSearchParams(window.location.hash.substring(1));
+                    return urlParams.get('param');
                 }
-            });
-        }
 
-        function exibirVideo(videoSrc) {
-            const videoContainer = document.getElementById('video-container');
-            videoContainer.innerHTML = `
-                <video controls>
-                    <source src="${videoSrc}" type="video/mp4">
-                    Seu navegador não suporta vídeos.
-                </video>`;
-        }
+                function carregarDados(param) {
+                    Papa.parse(googleSheetUrl, {
+                        download: true,
+                        header: true,
+                        complete: function(results) {
+                            const dados = results.data;
+                            const empresaInfo = dados.find(item => item.Param === param);
 
-        // Pega o parâmetro da URL e carrega o vídeo correspondente
-        const param = getParamFromURL();
-        carregarVideo(param);
-    </script>
+                            if (empresaInfo) {
+                                document.documentElement.style.setProperty('--primary-color', empresaInfo['Cor primária']);
+                                document.documentElement.style.setProperty('--secondary-color', empresaInfo['Cor secundária']);
+                                const buttonContainer = document.getElementById('button-container');
+                                const nomeCurriculo = empresaInfo['Nome do Currículo'].trim();
+                                buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Baixar Currículo</a>`;
+                            } else {
+                                exibirErro();
+                            }
+                            document.getElementById('spinner').style.display = 'none';
+                        },
+                        error: function(err) {
+                            console.error('Erro ao carregar a planilha:', err);
+                            exibirErro();
+                            document.getElementById('spinner').style.display = 'none';
+                        }
+                    });
+                }
+
+                function exibirErro() {
+                    const buttonContainer = document.getElementById('button-container');
+                    buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Currículo Padrão</a>`;
+                }
+
+                const param = getParamFromURL();
+                carregarDados(param);
+            </script>
+            </div>
+        </div>
 </body>
 </html>

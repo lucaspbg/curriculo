@@ -1,4 +1,4 @@
-
+'use strict'
 export async function loadMenu(containerSelector) {
     try {
         const response = await fetch('menu.html');
@@ -45,6 +45,9 @@ function toggleMenu() {
         overlay.style.display = 'none';
     }
 }
+
+// Expondo a função ao escopo global
+
 
 function setupMenu() {
     // Verificar parâmetros adicionais (se necessário)
