@@ -1,16 +1,12 @@
-:root{
-    --pimary: #333;
-    --secundary: #ffffff;
-    
-}      
-           
-      
+
       /* Barra de Menu */
         .navbar {
             background-color: #333;
             overflow: hidden;
             text-align: center;
             padding: 10px 0;
+           
+
 
         }
 
@@ -20,15 +16,17 @@
             padding: 12px 20px;
             display: inline-block;
             font-size: 18px;
+
+
         }
 
         .navbar a:hover {
-            background-color: #575757;
+            background-color: var(--primary-color, #575757);
             border-radius: 3px;
         }
  
         .navbar a.active {
-            background-color: #575757; /* Igual ao hover */
+            background-color: var(--secondary-color, #575757);
             color: white; /* Opcional */
             border-radius: 3px;
             

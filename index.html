@@ -9,10 +9,19 @@
 
     <link rel="stylesheet" href="style.css">
 
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script type="module" src="estilosDinamicos.js"></script>
+    <script type="module">
+        import { aplicarEstilosDinamicos } from './estilosDinamicos.js';
+        aplicarEstilosDinamicos();
+    </script>
+    
+
         <style>
         /* Estilos básicos */
         .back-image {
-            background: url('img/background.jpg') no-repeat center center fixed;
+            background: url('img/background.jpg') no-repeat center center ;
             background-size: cover;
 
         }
@@ -34,13 +43,6 @@
             width: 90%;
             margin: auto;
 
-        }
-
-        @media (min-width: 768px) {
-            .container-curriculo {
-                flex-direction: row;
-                margin: auto;
-            }
         }
 
         .left, .right {
@@ -67,7 +69,16 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            margin: 20px;
+            margin-top: 20px;
+            
+        }
+
+        .identificacao{
+
+            text-align: left;
+            font-family: 'Ubuntu', Arial, sans-serif;
+ 
+
         }
 
         h1 {
@@ -93,13 +104,25 @@
             padding: 10px 20px;
             border-radius: 5px;
             margin-top: 20px;
-            font-weight: bold;
+           /* font-weight: bold;*/
             transition: background-color 0.3s;
+            font-family: 'Ubuntu', Arial, sans-serif;
+
         }
 
         .button-container a:hover {
             background-color: var(--secondary-color, #0056b3);
         }
+
+        @media (min-width: 768px) {
+        
+        .container-curriculo {
+            flex-direction: row;
+            margin: auto;
+        }
+    }
+
+
     </style>
 
 </head>
@@ -124,19 +147,24 @@
                 <!-- Quadrante esquerdo -->
                 <div class="left">
                     <img src="img/lucas.jpg" alt="Foto do Lucas">
-                    <h1>Olá! Sou Lucas Pereira Borges</h1>
-                    <p>Estou em busca da próxima oportunidade de fazer a diferênça!</p>
+
+                    <h1 class="identificacao">
+                        <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges
+                    </h1>
+                    
+                    <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferênça!</p>
                 </div>
                 <!-- Quadrante direito -->
                 <div class="right">
-                    <h1>Bem-vindo!</h1>
+
+                    <h1 style="font-family: 'Ubuntu', Arial, sans-serif;">Bem-vindos!</h1>
+
                     <p>Navegue pelo site para explorar mais sobre meus projetos e experiências.</p>
                     <div class="button-container" id="button-container">
                     </div>
                 </div>
             </div>
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
             <script type="module">
                 import { loadMenu } from './menu.js';
                 
@@ -159,11 +187,14 @@
                             const empresaInfo = dados.find(item => item.Param === param);
 
                             if (empresaInfo) {
-                                document.documentElement.style.setProperty('--primary-color', empresaInfo['Cor primária']);
-                                document.documentElement.style.setProperty('--secondary-color', empresaInfo['Cor secundária']);
                                 const buttonContainer = document.getElementById('button-container');
+                                const empresaContainer = document.getElementById('empresa');
                                 const nomeCurriculo = empresaInfo['Nome do Currículo'].trim();
+                                const nomeEmpresa = empresaInfo['Empresa'].trim();
+
                                 buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Baixar Currículo</a>`;
+                                empresaContainer.innerHTML = `${nomeEmpresa}, estou em busca da próxima oportunidade de fazer a diferênça! `;
+
                             } else {
                                 exibirErro();
                             }
@@ -179,11 +210,15 @@
 
                 function exibirErro() {
                     const buttonContainer = document.getElementById('button-container');
-                    buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Currículo Padrão</a>`;
+                   // const empresaContainer = document.getElementById('identificacao');
+                    buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Baixar Currículo</a>`;
+                    //empresaContainer.innerHTML = `Olá!<br> Sou Lucas Pereira Borges`;
                 }
 
                 const param = getParamFromURL();
                 carregarDados(param);
+                
+
             </script>
             </div>
         </div>

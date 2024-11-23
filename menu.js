@@ -65,6 +65,8 @@ function setupMenu() {
         if (videoButton) videoButton.href = "video#" + "param=" + param;
         if (cursosButton) cursosButton.href = "cursos-treinamentos#" + "param=" + param;
         if (leiturasButton) leiturasButton.href = "leituras#" + "param=" + param;
+
+
     }
     
 }
@@ -73,16 +75,17 @@ function setupMenu() {
 function setActiveLink() {
     const links = document.querySelectorAll('.navbar a');
     const currentPath = window.location.pathname.replace(/\/$/, ''); // Remove barra final
-    const currentURL = window.location.href; // URL completa para comparação de parâmetros
+    const homePath = '/'; // Define explicitamente a URL raiz
 
     links.forEach(link => {
         const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, ''); // Remove barra final
 
-        // Verifica correspondência exata do caminho ou similaridade com a URL completa
-        if (currentPath === linkPath || currentURL.includes(link.getAttribute('href'))) {
+        // Verifica se o caminho atual é a raiz ou corresponde ao link
+        if ((currentPath === homePath && linkPath === homePath) || currentPath === linkPath) {
             link.classList.add('active'); // Adiciona a classe ativa
         } else {
             link.classList.remove('active'); // Remove a classe ativa
         }
     });
 }
+
