@@ -48,12 +48,21 @@ function toggleMenu() {
 
 // Expondo a função ao escopo global
 
+function getBasePath() {
+    // Detecta se está no localhost com subdiretório
+    if (window.location.origin.includes('localhost')) {
+        return '/curriculo'; // Subdiretório local
+    }
+    return ''; // Produção (sem subdiretório)
+}
 
 function setupMenu() {
     // Verificar parâmetros adicionais (se necessário)
     const urlParams = new URLSearchParams(window.location.hash.substr(1));
     const param = urlParams.get('param');
 
+
+    const basePath = getBasePath();
     // Atualizar os links do menu
     if (param) {
         const curriculoButton = document.getElementById("curriculoButton");
@@ -61,10 +70,18 @@ function setupMenu() {
         const cursosButton = document.getElementById("cursosButton");
         const leiturasButton = document.getElementById("leiturasButton");
 
-        if (curriculoButton) curriculoButton.href = "/#" + "param=" + param;
+        if (curriculoButton) curriculoButton.href = basePath + "/#" + "param=" + param;
         if (videoButton) videoButton.href = "video#" + "param=" + param;
         if (cursosButton) cursosButton.href = "cursos-treinamentos#" + "param=" + param;
         if (leiturasButton) leiturasButton.href = "leituras#" + "param=" + param;
+        
+    }else{
+
+        if (curriculoButton) curriculoButton.href = basePath + "/";
+        if (videoButton) videoButton.href = "video";
+        if (cursosButton) cursosButton.href = "cursos-treinamentos";
+        if (leiturasButton) leiturasButton.href = "leituras";
+
     }
     
 }
