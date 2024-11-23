@@ -61,7 +61,7 @@ function setupMenu() {
         const cursosButton = document.getElementById("cursosButton");
         const leiturasButton = document.getElementById("leiturasButton");
 
-        if (curriculoButton) curriculoButton.href = "index#" + "param=" + param;
+        if (curriculoButton) curriculoButton.href = "/#" + "param=" + param;
         if (videoButton) videoButton.href = "video#" + "param=" + param;
         if (cursosButton) cursosButton.href = "cursos-treinamentos#" + "param=" + param;
         if (leiturasButton) leiturasButton.href = "leituras#" + "param=" + param;
