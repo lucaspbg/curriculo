@@ -1,5 +1,5 @@
-// URL do Google Sheets no formato CSV
-const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=660387765&output=csv';
+// Importa o cliente do Supabase
+import { supabase } from './supabaseClient.js';
 
 // Obtém o parâmetro "param" da URL
 function getParamFromURL() {
@@ -7,30 +7,29 @@ function getParamFromURL() {
     return urlParams.get('param');
 }
 
-// Carrega os dados da planilha e aplica as cores
-function carregarDados(param) {
-    Papa.parse(googleSheetUrl, {
-        download: true,
-        header: true,
-        complete: function(results) {
-            const dados = results.data;
+// Carrega os dados do Supabase e aplica as cores
+async function carregarDados(param) {
+    try {
+        // Consulta a tabela no Supabase com base no parâmetro
+        const { data, error } = await supabase
+            .from('curriculos')
+            .select('*')
+            .eq('param', param);
 
-            // Busca o registro correspondente ao parâmetro
-            const empresaInfo = dados.find(item => item.Param === param);
-
-            if (empresaInfo) {
-                // Define as variáveis de cor como propriedades CSS
-                document.documentElement.style.setProperty('--primary-color', empresaInfo['Cor primária']);
-                document.documentElement.style.setProperty('--secondary-color', empresaInfo['Cor secundária']);
-                //console.log('Cores aplicadas:', empresaInfo['Cor primária'], empresaInfo['Cor secundária']);
-            } else {
-                console.warn(`Nenhuma correspondência encontrada para o parâmetro: ${param}`);
-            }
-        },
-        error: function(error) {
-            console.error('Erro ao carregar os dados da planilha:', error);
+        if (error || data.length === 0) {
+            console.warn(`Nenhuma correspondência encontrada para o parâmetro: ${param}`);
+            return;
         }
-    });
+
+        const empresaInfo = data[0];
+
+        // Define as variáveis de cor como propriedades CSS
+        document.documentElement.style.setProperty('--primary-color', empresaInfo['cor_primaria']);
+        document.documentElement.style.setProperty('--secondary-color', empresaInfo['cor_secundaria']);
+        //console.log('Cores aplicadas:', empresaInfo['cor_primaria'], empresaInfo['cor_secundaria']);
+    } catch (err) {
+        console.error('Erro ao carregar os dados do Supabase:', err);
+    }
 }
 
 // Função principal para inicializar as cores dinâmicas

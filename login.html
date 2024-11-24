@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #333, #443e3e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-container h1 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .login-container label {
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .login-container input {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .login-container button {
+            padding: 0.75rem;
+            background-color: #0f0f0f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: #1a1a1b;
+        }
+
+        .login-container .forgot-password {
+            background: none;
+            color: #ddd;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+ 
+        }
+
+        .login-container .forgot-password:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+
+            .login-container h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+            <button type="submit">Entrar</button>
+            <button type="button" class="forgot-password" id="forgot-password">Esqueceu a senha?</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
+        // Login Form
+        const form = document.getElementById('login-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = form.email.value;
+            const password = form.password.value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                alert('Erro ao fazer login: ' + error.message);
+            } else {
+                // Salva o token no localStorage para validar acesso
+                localStorage.setItem('authToken', data.session.access_token);
+                //alert('Login bem-sucedido!');
+                window.location.href = 'cadastro-curriculos.html'; // Redireciona para a área restrita
+            }
+        });
+
+        // Forgot Password
+/*        const forgotPasswordButton = document.getElementById('forgot-password');
+        forgotPasswordButton.addEventListener('click', async () => {
+            const email = prompt('Digite o e-mail associado à sua conta, para poder resetar sua senha:');
+            if (email) {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: 'reset-password.html',
+                });
+                if (error) {
+                    alert('Erro ao enviar recuperação de senha: ' + error.message);
+                } else {
+                    alert('Um e-mail de recuperação foi enviado para ' + email);
+                }
+            }
+        });*/
+
+
+    // Forgot Password
+    const forgotPasswordButton = document.getElementById('forgot-password');
+        forgotPasswordButton.addEventListener('click', async () => {
+            const email = prompt('Digite o e-mail associado à sua conta:');
+
+                    // Validação do e-mail
+                    if (!email) {
+                        alert('Por favor, insira um e-mail.');
+                        return;
+                    }
+  
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex para validar formato de e-mail
+                    if (!emailRegex.test(email)) {
+                        alert('Por favor, insira um e-mail válido.');
+                        return;
+                    }
+
+                    // Envia o link de recuperação
+                    
+                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                        redirectTo: 'reset-password.html',
+                    });
+                    if (error) {
+                        alert('Erro ao enviar recuperação de senha: ' + error.message);
+                    } else {
+                        alert('Um e-mail de recuperação foi enviado para ' + email);
+                    }
+                
+            
+        });
+
+
+
+
+
+
+    </script>
+</body>
+</html>

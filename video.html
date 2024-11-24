@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script type="module" src="estilosDinamicos.js"></script>
-
-
-
     <title>Vídeo Apresentação</title>
-
     <link rel="stylesheet" href="style.css">
 
     <script type="module">
@@ -18,39 +12,33 @@
         aplicarEstilosDinamicos();
     </script>
     
-<style>
-    /* Estilos básicos */
-    .back-image {
-        background: url('img/background.jpg') no-repeat center center ;
-        background-size: cover;
+    <style>
+        /* Estilos básicos */
+        .back-image {
+            background: url('img/background.jpg') no-repeat center center;
+            background-size: cover;
+        }
 
-    }
-
-    .back-image-overlay {
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-
-    }
-
+        .back-image-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
 
     <div class="spinner-overlay" id="spinner">
-        <div class="spinner">            
-        </div>
+        <div class="spinner"></div>
     </div>
 
     <!-- Contêiner onde o menu será carregado -->
     <div id="menu-container">
-
-    <script type="module">
-        import { loadMenu } from './menu.js';
-        // Carregar o menu no elemento
-        loadMenu('#menu-container');
-    </script>
+        <script type="module">
+            import { loadMenu } from './menu.js';
+            loadMenu('#menu-container');
+        </script>
     </div>
   
     <div class="back-image">
@@ -58,62 +46,57 @@
             <div class="container">
                 <h1>Vídeo Apresentação</h1>
                 <!-- O vídeo será inserido aqui via JavaScript -->
-                <div id="video-container">
-                    <!--p>Carregando o vídeo...</p-->                           
-                </div>
+                <div id="video-container"></div>
             </div>
         </div>
     </div>
 
-
-    <script>
-        const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=660387765&output=csv';
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
 
         function getParamFromURL() {
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
             return urlParams.get('param');
         }
 
-        function carregarVideo(param) {
-            Papa.parse(googleSheetUrl, {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    const dados = results.data;
-                    const videoInfo = dados.find(item => item.Param === param);
+        async function carregarVideo(param) {
+            try {
+                const { data, error } = await supabase
+                    .from('curriculos')
+                    .select('*')
+                    .eq('param', param)
+                    .single();
 
-                    let videoSrc;
-
-                    if (videoInfo) {
-                        const videoId = videoInfo.Vídeo.trim();
-                        videoSrc = `videos/${videoId}.mp4`;
-                        document.getElementById('spinner').style.display = 'none';
-                    } else {
-                        videoSrc = 'videos/0.mp4'; // Vídeo padrão
-                        document.getElementById('spinner').style.display = 'none';
-                    }
-
-                    // Verificar se o vídeo existe antes de exibi-lo
-                    fetch(videoSrc, { method: 'HEAD' })
-                        .then(response => {
-                            if (response.ok) {
-                                exibirVideo(videoSrc);
-                            } else {
-                                exibirVideo('videos/0.mp4'); // Vídeo padrão se o arquivo não existir
-                                document.getElementById('spinner').style.display = 'none';
-                            }
-                        })
-                        .catch(() => {
-                            exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
-                            document.getElementById('spinner').style.display = 'none';
-                        });
-                },
-                error: function(err) {
-                    console.error('Erro ao carregar a planilha:', err);
+                if (error) {
+                    console.error('Erro ao buscar dados do Supabase:', error);
                     exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
                     document.getElementById('spinner').style.display = 'none';
+                    return;
                 }
-            });
+
+                let videoSrc;
+
+                if (data) {
+                    const videoId = data.video || '0'; // Use '0' como padrão se `video` for nulo
+                    videoSrc = `videos/${videoId}.mp4`;
+                } else {
+                    videoSrc = 'videos/0.mp4'; // Vídeo padrão
+                }
+
+                // Verificar se o vídeo existe antes de exibi-lo
+                const response = await fetch(videoSrc, { method: 'HEAD' });
+
+                if (response.ok) {
+                    exibirVideo(videoSrc);
+                } else {
+                    exibirVideo('videos/0.mp4'); // Vídeo padrão se o arquivo não existir
+                }
+            } catch (err) {
+                console.error('Erro ao carregar o vídeo:', err);
+                exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
+            } finally {
+                document.getElementById('spinner').style.display = 'none';
+            }
         }
 
         function exibirVideo(videoSrc) {

@@ -127,98 +127,78 @@
 <body>
     <div class="back-image">
         <div class="back-image-overlay">
-            <!-- Contêiner onde o menu será carregado -->
             <div id="menu-container">
-
-            <script type="module">
-                import { loadMenu } from './menu.js';
-                // Carregar o menu no elemento
-                loadMenu('#menu-container');
-            </script>
+                <script type="module">
+                    import { loadMenu } from './menu.js';
+                    loadMenu('#menu-container');
+                </script>
             </div>
             
             <div class="container-curriculo">
                 <div class="spinner-overlay" id="spinner">
-                    <div class="spinner">                        
-                    </div>
+                    <div class="spinner"></div>
                 </div>
-                <!-- Quadrante esquerdo -->
                 <div class="left">
                     <img src="img/lucas.jpg" alt="Foto do Lucas">
-
                     <h1 class="identificacao">
                         <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges
                     </h1>
-                    
-                    <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferênça!</p>
+                    <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferença!</p>
                 </div>
-                <!-- Quadrante direito -->
                 <div class="right">
-
                     <h1 style="font-family: 'Ubuntu', Arial, sans-serif;">Bem-vindos!</h1>
-
                     <p>Navegue pelo site para explorar mais sobre meus projetos e experiências.</p>
-                    <div class="button-container" id="button-container">
-                    </div>
+                    <div class="button-container" id="button-container"></div>
                 </div>
             </div>
 
             <script type="module">
-                import { loadMenu } from './menu.js';
-                
-                // Carregar o menu no contêiner
-                loadMenu('#menu-container');
-                
-                const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=660387765&output=csv';
+                import { supabase } from './supabaseClient.js';
 
                 function getParamFromURL() {
                     const urlParams = new URLSearchParams(window.location.hash.substring(1));
                     return urlParams.get('param');
                 }
 
-                function carregarDados(param) {
-                    Papa.parse(googleSheetUrl, {
-                        download: true,
-                        header: true,
-                        complete: function(results) {
-                            const dados = results.data;
-                            const empresaInfo = dados.find(item => item.Param === param);
+                async function carregarDados(param) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('curriculos')
+                            .select('*')
+                            .eq('param', param);
 
-                            if (empresaInfo) {
-                                const buttonContainer = document.getElementById('button-container');
-                                const empresaContainer = document.getElementById('empresa');
-                                const nomeCurriculo = empresaInfo['Nome do Currículo'].trim();
-                                const nomeEmpresa = empresaInfo['Empresa'].trim();
-
-                                buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Baixar Currículo</a>`;
-                                empresaContainer.innerHTML = `${nomeEmpresa}, estou em busca da próxima oportunidade de fazer a diferênça! `;
-
-                            } else {
-                                exibirErro();
-                            }
-                            document.getElementById('spinner').style.display = 'none';
-                        },
-                        error: function(err) {
-                            console.error('Erro ao carregar a planilha:', err);
+                        if (error || data.length === 0) {
                             exibirErro();
-                            document.getElementById('spinner').style.display = 'none';
+                            return;
                         }
-                    });
+
+                        const empresaInfo = data[0];
+                        const buttonContainer = document.getElementById('button-container');
+                        const empresaContainer = document.getElementById('empresa');
+
+                        const nomeCurriculo = empresaInfo['nome_curriculo'].trim();
+                        const nomeEmpresa = empresaInfo['empresa'].trim();
+
+                        buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Baixar Currículo</a>`;
+                        empresaContainer.innerHTML = `${nomeEmpresa}, estou em busca da próxima oportunidade de fazer a diferença!`;
+
+                        document.getElementById('spinner').style.display = 'none';
+                    } catch (err) {
+                        console.error('Erro ao carregar dados do Supabase:', err);
+                        exibirErro();
+                    }
                 }
 
                 function exibirErro() {
                     const buttonContainer = document.getElementById('button-container');
-                   // const empresaContainer = document.getElementById('identificacao');
                     buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Baixar Currículo</a>`;
-                    //empresaContainer.innerHTML = `Olá!<br> Sou Lucas Pereira Borges`;
+                    document.getElementById('spinner').style.display = 'none';
                 }
 
                 const param = getParamFromURL();
                 carregarDados(param);
-                
-
             </script>
-            </div>
         </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Currículos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        input, select, button {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>CRUD Currículos</h1>
+    <form id="form">
+        <input type="hidden" id="id">
+        <input type="text" id="empresa" placeholder="Empresa" required>
+        <input type="text" id="param" placeholder="Parâmetro (único)" required>
+        <input type="text" id="nome_curriculo" placeholder="Nome do Currículo" required>
+        <input type="number" id="video" placeholder="ID do Vídeo">
+        <input type="color" id="cor_primaria" placeholder="Cor Primária">
+        <input type="color" id="cor_secundaria" placeholder="Cor Secundária">
+        <button type="submit">Salvar</button>
+    </form>
+    <table id="curriculos">
+        <thead>
+            <tr>
+                <!--th>ID</th-->
+                <th>Empresa</th>
+                <th>Parâmetro</th>
+                <th>Nome</th>
+                <th>Vídeo</th>
+                <th>Cor Primária</th>
+                <th>Cor Secundária</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+<script type="module">
+    import { supabase } from './supabaseClient.js';
+
+    const form = document.getElementById('form');
+    const curriculosTable = document.querySelector('#curriculos tbody');
+
+    // Função para carregar currículos
+    async function loadCurriculos() {
+        const { data, error } = await supabase.from('curriculos').select('*');
+        if (error) {
+            alert('Erro ao carregar currículos: ' + error.message);
+            return;
+        }
+        renderCurriculos(data);
+    }
+
+    // Função para renderizar currículos na tabela
+    function renderCurriculos(curriculos) {
+        curriculosTable.innerHTML = '';
+        curriculos.forEach((curriculo) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+
+                <td>${curriculo.empresa}</td>
+                <td>${curriculo.param}</td>
+                <td>${curriculo.nome_curriculo}</td>
+                <td>${curriculo.video || ''}</td>
+                <td>${curriculo.cor_primaria || ''}</td>
+                <td>${curriculo.cor_secundaria || ''}</td>
+                <td>
+                    <button onclick="editCurriculo(${curriculo.id})">Editar</button>
+                    <button onclick="deleteCurriculo(${curriculo.id})">Excluir</button>
+                </td>
+            `;
+            curriculosTable.appendChild(row);
+        });
+    }
+
+    // Função para salvar ou atualizar currículo
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = form.id.value;
+        const curriculo = {
+            empresa: form.empresa.value,
+            param: form.param.value,
+            nome_curriculo: form.nome_curriculo.value,
+            video: form.video.value || null,
+            cor_primaria: form.cor_primaria.value || null,
+            cor_secundaria: form.cor_secundaria.value || null,
+        };
+
+        if (id) {
+            // Atualizar currículo
+            const { error } = await supabase.from('curriculos').update(curriculo).eq('id', id);
+            if (error) {
+                alert('Erro ao atualizar currículo: ' + error.message);
+                return;
+            }
+        } else {
+            // Criar novo currículo
+            const { error } = await supabase.from('curriculos').insert(curriculo);
+            if (error) {
+                alert('Erro ao criar currículo: ' + error.message);
+                return;
+            }
+        }
+
+        form.reset();
+        loadCurriculos();
+    });
+
+    // Função para carregar dados no formulário para edição
+    window.editCurriculo = async (id) => {
+        const { data, error } = await supabase.from('curriculos').select('*').eq('id', id).single();
+        if (error) {
+            alert('Erro ao carregar currículo: ' + error.message);
+            return;
+        }
+        form.id.value = data.id;
+        form.empresa.value = data.empresa;
+        form.param.value = data.param;
+        form.nome_curriculo.value = data.nome_curriculo;
+        form.video.value = data.video || '';
+        form.cor_primaria.value = data.cor_primaria || '';
+        form.cor_secundaria.value = data.cor_secundaria || '';
+    };
+
+    // Função para excluir currículo
+    window.deleteCurriculo = async (id) => {
+        if (!confirm('Tem certeza que deseja excluir este currículo?')) return;
+        const { error } = await supabase.from('curriculos').delete().eq('id', id);
+        if (error) {
+            alert('Erro ao excluir currículo: ' + error.message);
+            return;
+        }
+        loadCurriculos();
+    };
+
+    // Carregar currículos ao abrir a página
+    loadCurriculos();
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

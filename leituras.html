@@ -1,44 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script type="module" src="estilosDinamicos.js"></script>
-
-    
-
     <title>Leituras</title>
-
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="estilosDinamicos.js"></script>
     <script type="module">
         import { aplicarEstilosDinamicos } from './estilosDinamicos.js';
         aplicarEstilosDinamicos();
     </script>
-
 </head>
 <body>
-
     <div class="spinner-overlay" id="spinner">
-        <div class="spinner">            
-        </div>
+        <div class="spinner"></div>
     </div>
-    
-    <!-- Contêiner onde o menu será carregado -->
-    <div id="menu-container">
 
-    <script type="module">
-        import { loadMenu } from './menu.js';        
-        // Carregar o menu no elemento
-        loadMenu('#menu-container');
-    </script>
+    <div id="menu-container">
+        <script type="module">
+            import { loadMenu } from './menu.js';
+            loadMenu('#menu-container');
+        </script>
     </div>
 
     <div class="container">
         <h1>Lista de Leituras</h1>
 
-        <!-- Filtro de Categoria -->
         <div class="filter-container">
             <label for="categoria-filter">Filtrar por Categoria:</label>
             <select id="categoria-filter" onchange="filterTable()">
@@ -46,7 +33,6 @@
             </select>
         </div>
 
-        <!-- Tabela de leituras e Treinamentos -->
     <div class="table-wrapper"> 
         <table id="leitura-table">
             <colgroup>
@@ -70,9 +56,7 @@
             </tbody>
         </table>
     </div>
-
-    <script>
-
+    <script type="module">
 
         // Inicializar a ordem de classificação na abertura da página
         document.addEventListener("DOMContentLoaded", () => {
@@ -82,88 +66,45 @@
             }
         });
 
-        // Função para ordenar a tabela pela coluna "Concluído em"
-        function sortTable() {
-            const table = document.getElementById("leitura-table");
-            const rows = Array.from(table.rows).slice(1);
-            const index = 3; // Coluna "Concluído em"
-            let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+            import { supabase } from './supabaseClient.js';
 
-            rows.sort((a, b) => {
-                const aDate = parseDate(a.cells[index].innerText);
-                const bDate = parseDate(b.cells[index].innerText);
+        async function carregarLeituras() {
+            const { data: leituras, error } = await supabase
+                .from('leitura_livros')
+                .select('*')
 
-                return isAsc ? aDate - bDate : bDate - aDate;
-            });
+            if (error) {
+                console.error('Erro ao carregar dados do Supabase:', error);
+                document.getElementById('spinner').style.display = 'none';
+                return;
+            }
 
-            rows.forEach(row => table.tBodies[0].appendChild(row));
-            table.dataset.sortOrder = isAsc ? "asc" : "desc";
-        }
-
-
-        // Função para converter "MM/YYYY" em um objeto Date
-        function parseDate(dateStr) {
-            const [month, year] = dateStr.split('/').map(Number);
-            return new Date(year, month - 1); // Mês começa em 0 (janeiro é 0)
-        }
-
-
-        // Função para filtrar a tabela por categoria
-        function filterTable() {
-            const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('#leitura-table tbody tr');
-
-            rows.forEach(row => {
-                const categoryCell = row.cells[2]; // Coluna "Categoria"
-                const categoryText = categoryCell.textContent.toLowerCase();
-
-                if (filterValue === '' || categoryText.includes(filterValue)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        // Função para exibir o certificado
-        function verCertificado(certificado) {
-            window.open('certificados/' + certificado + '.pdf', '_blank');
-        }
-
-
-    function carregarleituras() {
-    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=707712600&output=csv';
-
-    Papa.parse(googleSheetUrl, {
-        download: true,
-        header: true, // Usa a primeira linha como cabeçalho
-        complete: function(results) {
-            const leituras = results.data;
             const tbody = document.querySelector('#leitura-table tbody');
             const categoriaFilter = document.getElementById('categoria-filter');
-            const categorias = new Set(); // Usar um Set para evitar duplicados
+            const categorias = new Set();
 
-            tbody.innerHTML = ''; // Limpa as linhas existentes
+            tbody.innerHTML = '';
 
             leituras.forEach(leitura => {
-                // Popula a tabela
                 const row = document.createElement('tr');
+                const dataBR = new Date(leitura.data_leitura).toLocaleDateString('pt-BR', {
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
                 row.innerHTML = `
-                    <td>${leitura['Título do livro']}</td>
-                    <td>${leitura['Autor']}</td>
-                    <td>${leitura['Categoria']}</td>
-                    <td>${leitura['Data da leitura']}</td>
+                    <td>${leitura.titulo}</td>
+                    <td>${leitura.autor}</td>
+                    <td>${leitura.categoria}</td>
+                    <td>${dataBR}</td>
                 `;
                 tbody.appendChild(row);
-                
 
-                // Adiciona a categoria ao conjunto
-                if (leitura['Categoria']) {
-                    categorias.add(leitura['Categoria'].trim());
+                if (leitura.categoria) {
+                    categorias.add(leitura.categoria.trim());
                 }
             });
 
-            // Popula o filtro de categorias
             categorias.forEach(categoria => {
                 const option = document.createElement('option');
                 option.value = categoria;
@@ -172,22 +113,46 @@
             });
 
             sortTable();
-
-            document.getElementById('spinner').style.display = 'none';
-
-        },
-        error: function(error) {
-            console.error('Erro ao carregar Google Sheets:', error);
             document.getElementById('spinner').style.display = 'none';
         }
-    });
-}
 
-        // Chama a função para carregar os dados quando a página for carregada
-        window.onload = carregarleituras;
+        function sortTable() {
+            const table = document.getElementById('leitura-table');
+            const rows = Array.from(table.rows).slice(1);
+            const index = 3;
+            let isAsc = table.dataset.sortOrder !== 'asc';
+
+            rows.sort((a, b) => {
+                const aDate = new Date(a.cells[index].innerText.split('/').reverse().join('-'));
+                const bDate = new Date(b.cells[index].innerText.split('/').reverse().join('-'));
+
+                return isAsc ? aDate - bDate : bDate - aDate;
+            });
+
+            rows.forEach(row => table.tBodies[0].appendChild(row));
+            table.dataset.sortOrder = isAsc ? 'asc' : 'desc';
+        }
+
+        function filterTable() {
+            const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
+            const rows = document.querySelectorAll('#leitura-table tbody tr');
+
+            rows.forEach(row => {
+                const categoryCell = row.cells[2];
+                const categoryText = categoryCell.textContent.toLowerCase();
+
+                if (!filterValue || categoryText.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
 
 
+        window.onload = carregarLeituras;
+        window.filterTable = filterTable;
+        window.sortTable = sortTable;
     </script>
-
 </body>
 </html>

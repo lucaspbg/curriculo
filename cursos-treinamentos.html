@@ -1,43 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script type="module" src="estilosDinamicos.js"></script>
-
-
-    <title>Cursos e treinamentos</title>
-
+    <title>Cursos e Treinamentos</title>
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="estilosDinamicos.js"></script>
     <script type="module">
         import { aplicarEstilosDinamicos } from './estilosDinamicos.js';
         aplicarEstilosDinamicos();
     </script>
-    
 </head>
 <body>
-
     <div class="spinner-overlay" id="spinner">
-        <div class="spinner">            
-        </div>
+        <div class="spinner"></div>
     </div>
 
-    <!-- Contêiner onde o menu será carregado -->
     <div id="menu-container">
-
-    <script type="module">
-        import { loadMenu } from './menu.js';
-        // Carregar o menu no elemento
-        loadMenu('#menu-container');
-    </script>
+        <script type="module">
+            import { loadMenu } from './menu.js';
+            loadMenu('#menu-container');
+        </script>
     </div>
 
     <div class="container">
         <h1>Lista de Cursos e Treinamentos</h1>
 
-        <!-- Filtro de Categoria -->
         <div class="filter-container">
             <label for="categoria-filter">Filtrar por Categoria:</label>
             <select id="categoria-filter" onchange="filterTable()">
@@ -45,37 +33,32 @@
             </select>
         </div>
 
-        <!-- Tabela de Cursos e Treinamentos -->
+        <div class="table-wrapper">
+            <table id="curso-table">
+                <colgroup>
+                    <col style="width: 18%;">
+                    <col style="width: 16%;">
+                    <col style="width: 18%;">
+                    <col style="width: 10%;">
+                    <col style="width: 12%;">
+                    <col style="width: 12%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Nome do curso/treinamento</th>
+                        <th>Instituição</th>
+                        <th>Categoria</th>
+                        <th>Carga horária</th>
+                        <th onclick="sortTable()">Concluído em ▲▼</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 
-<div class="table-wrapper">
-    <table id="curso-table">
-        <colgroup>
-            <col style="width: 18%;"> <!-- Nome do curso -->
-            <col style="width: 16%;"> <!-- Instituição -->
-            <col style="width: 18%;"> <!-- Categoria -->
-            <col style="width: 10%;"> <!-- Carga horária -->
-            <col style="width: 12%;"> <!-- Concluído em -->
-            <col style="width: 12%;"> <!-- Ação -->
-        </colgroup>
-        <thead>
-            <tr>
-                <th>Nome do curso/treinamento</th>
-                <th>Instituição</th>
-                <th>Categoria</th>
-                <th>Carga horária</th>
-                <th onclick="sortTable()">Concluído em ▲▼</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Conteúdo da tabela -->
-
-        </tbody>
-    </table>
-</div>
-
-
-    <script>
+    <script type="module">
 
         // Inicializar a ordem de classificação na abertura da página
         document.addEventListener("DOMContentLoaded", () => {
@@ -85,40 +68,88 @@
             }
         });
 
-        // Função para ordenar a tabela pela coluna "Concluído em"
+            import { supabase } from './supabaseClient.js';
+
+        async function carregarCursos() {
+            const { data: cursos, error } = await supabase
+                .from('cursos_treinamentos')
+                .select('*')
+
+            if (error) {
+                console.error('Erro ao carregar dados do Supabase:', error);
+                document.getElementById('spinner').style.display = 'none';
+                return;
+            }
+
+            const tbody = document.querySelector('#curso-table tbody');
+            const categoriaFilter = document.getElementById('categoria-filter');
+            const categorias = new Set();
+
+            tbody.innerHTML = '';
+
+            cursos.forEach(curso => {
+                const row = document.createElement('tr');
+                const dataBR = new Date(curso.concluido_em).toLocaleDateString('pt-BR', {
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                row.innerHTML = `
+                    <td>${curso.nome_curso}</td>
+                    <td>${curso.instituicao}</td>
+                    <td>${curso.categoria}</td>
+                    <td>${curso.carga_horaria}</td>
+                    <td>${dataBR}</td>
+                    <td>
+                        ${curso.certificado 
+                            ? `<button class="btn-certificado" onclick="verCertificado('${curso.certificado}')">Ver Certificado</button>` 
+                            : '-'}
+                    </td>
+                `;
+                tbody.appendChild(row);
+
+                if (curso.categoria) {
+                    categorias.add(curso.categoria.trim());
+                }
+            });
+
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria;
+                categoriaFilter.appendChild(option);
+            });
+
+            sortTable();
+            document.getElementById('spinner').style.display = 'none';
+        }
+
         function sortTable() {
-            const table = document.getElementById("curso-table");
+            const table = document.getElementById('curso-table');
             const rows = Array.from(table.rows).slice(1);
-            const index = 4; // Coluna "Concluído em"
-            let isAsc = table.dataset.sortOrder !== "asc"; // Alternar entre asc e desc
+            const index = 4;
+            let isAsc = table.dataset.sortOrder !== 'asc';
 
             rows.sort((a, b) => {
-                const aDate = parseDate(a.cells[index].innerText);
-                const bDate = parseDate(b.cells[index].innerText);
+                const aDate = new Date(a.cells[index].innerText.split('/').reverse().join('-'));
+                const bDate = new Date(b.cells[index].innerText.split('/').reverse().join('-'));
 
                 return isAsc ? aDate - bDate : bDate - aDate;
             });
 
             rows.forEach(row => table.tBodies[0].appendChild(row));
-            table.dataset.sortOrder = isAsc ? "asc" : "desc";
-        }
-     
-        // Função para converter "MM/YYYY" em um objeto Date
-        function parseDate(dateStr) {
-            const [month, year] = dateStr.split('/').map(Number);
-            return new Date(year, month - 1); // Mês começa em 0 (janeiro é 0)
+            table.dataset.sortOrder = isAsc ? 'asc' : 'desc';
         }
 
-        // Função para filtrar a tabela por categoria
         function filterTable() {
             const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
             const rows = document.querySelectorAll('#curso-table tbody tr');
 
             rows.forEach(row => {
-                const categoryCell = row.cells[2]; // Coluna "Categoria"
+                const categoryCell = row.cells[2];
                 const categoryText = categoryCell.textContent.toLowerCase();
 
-                if (filterValue === '' || categoryText.includes(filterValue)) {
+                if (!filterValue || categoryText.includes(filterValue)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -131,66 +162,10 @@
             window.open('certificados/' + certificado + '.pdf', '_blank');
         }
 
-
-    function carregarCursos() {
-        
-    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSh9vsJP8S5B6m_2GA4s89TWcqufGT3_VzNeLYialcVbksXwqIM1QXMQGw23rG2V9L7ljHpWsLvuUeL/pub?gid=0&output=csv';
-
-    Papa.parse(googleSheetUrl, {
-        download: true,
-        header: true, // Usa a primeira linha como cabeçalho
-        complete: function(results) {
-            const cursos = results.data;
-            const tbody = document.querySelector('#curso-table tbody');
-            const categoriaFilter = document.getElementById('categoria-filter');
-            const categorias = new Set(); // Usar um Set para evitar duplicados
-
-            tbody.innerHTML = ''; // Limpa as linhas existentes
-
-            cursos.forEach(curso => {
-                // Popula a tabela
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${curso['Nome do curso/treinamento']}</td>
-                    <td>${curso['Instituição']}</td>
-                    <td>${curso['Categoria']}</td>
-                    <td>${curso['Carga horária']}</td>
-                    <td>${curso['Concluído em']}</td>
-                    <td><button class="btn-certificado" onclick="verCertificado('${curso['Certificado']}')">Ver Certificado</button></td>
-                `;
-                tbody.appendChild(row);
-
-                // Adiciona a categoria ao conjunto
-                if (curso['Categoria']) {
-                    categorias.add(curso['Categoria'].trim());
-                }
-            });
-
-            // Popula o filtro de categorias
-            categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria;
-                option.textContent = categoria;
-                categoriaFilter.appendChild(option);
-            });
-
-            sortTable();
-
-            document.getElementById('spinner').style.display = 'none';
-
-        },
-        error: function(error) {
-            console.error('Erro ao carregar Google Sheets:', error);
-            document.getElementById('spinner').style.display = 'none';
-        }
-    });
-}
-
-        // Chama a função para carregar os dados quando a página for carregada
         window.onload = carregarCursos;
-
-
+        window.verCertificado = verCertificado;
+        window.filterTable = filterTable;
+        window.sortTable = sortTable;
     </script>
-
 </body>
 </html>
