@@ -10,18 +10,24 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
+    
+        html, body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #333, #443e3e);
+            background: #443e3e;
             color: #fff;
+            height: 100%;
+            width: 100%;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
         }
-
+    
+        body {
+            padding: 50px;
+        
+        }
+    
         .login-container {
             background: rgba(255, 255, 255, 0.1);
             padding: 2rem;
@@ -30,31 +36,32 @@
             text-align: center;
             width: 100%;
             max-width: 400px;
+            margin: auto;
         }
-
+    
         .login-container h1 {
             margin-bottom: 1rem;
             font-size: 2rem;
         }
-
+    
         .login-container form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-
+    
         .login-container label {
             font-size: 1rem;
             text-align: left;
         }
-
+    
         .login-container input {
             padding: 0.75rem;
             border: none;
             border-radius: 5px;
             font-size: 1rem;
         }
-
+    
         .login-container button {
             padding: 0.75rem;
             background-color: #0f0f0f;
@@ -65,34 +72,34 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
+    
         .login-container button:hover {
             background-color: #1a1a1b;
         }
-
+    
         .login-container .forgot-password {
             background: none;
             color: #ddd;
             border: none;
             cursor: pointer;
             font-size: 0.9rem;
- 
         }
-
+    
         .login-container .forgot-password:hover {
             color: #fff;
         }
-
+    
         @media (max-width: 480px) {
             .login-container {
                 padding: 1.5rem;
             }
-
+    
             .login-container h1 {
                 font-size: 1.5rem;
             }
         }
     </style>
+    
 </head>
 <body>
     <div class="login-container">
@@ -129,27 +136,12 @@
             }
         });
 
-        // Forgot Password
-/*        const forgotPasswordButton = document.getElementById('forgot-password');
-        forgotPasswordButton.addEventListener('click', async () => {
-            const email = prompt('Digite o e-mail associado à sua conta, para poder resetar sua senha:');
-            if (email) {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: 'reset-password.html',
-                });
-                if (error) {
-                    alert('Erro ao enviar recuperação de senha: ' + error.message);
-                } else {
-                    alert('Um e-mail de recuperação foi enviado para ' + email);
-                }
-            }
-        });*/
 
 
     // Forgot Password
     const forgotPasswordButton = document.getElementById('forgot-password');
         forgotPasswordButton.addEventListener('click', async () => {
-            const email = prompt('Digite o e-mail associado à sua conta:');
+            const email = prompt('Para poder resetar sua senha, digite corretamente o e-mail associado à sua conta:');
 
                     // Validação do e-mail
                     if (!email) {
@@ -171,7 +163,7 @@
                     if (error) {
                         alert('Erro ao enviar recuperação de senha: ' + error.message);
                     } else {
-                        alert('Um e-mail de recuperação foi enviado para ' + email);
+                        alert('Um e-mail de recuperação foi enviado para ' + email + '<br> Podem levar alguns minutos para que receba, verifiqu a caixa de spam.');
                     }
                 
             
