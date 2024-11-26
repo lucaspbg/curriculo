@@ -158,7 +158,7 @@
                     // Envia o link de recuperação
                     
                     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: 'https://lucaspereiraborges.netlify.app/reset-password/',
+                    redirectTo: 'https://lucaspereiraborges.netlify.app/reset-password',
                     })
 
                     if (error) {
