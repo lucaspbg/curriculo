@@ -157,20 +157,21 @@
 
                     // Envia o link de recuperação
                     
-                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                        redirectTo: 'reset-password.html',
-                    });
+                    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: 'https://lucaspereiraborges.netlify.app/reset-password',
+                    })
+
                     if (error) {
                         alert('Erro ao enviar recuperação de senha: ' + error.message);
                     } else {
-                        alert('Um e-mail de recuperação foi enviado para ' + email + '<br> Podem levar alguns minutos para que receba, verifiqu a caixa de spam.');
+                        alert('Um e-mail de recuperação foi enviado para: ' + email + '\nPode levar alguns minutos para que receba, verifique também na caixa de spam.');
                     }
                 
             
         });
 
 
-
+reset-password
 
 
 
