@@ -74,6 +74,14 @@
            
         }
 
+        #login-user {
+            position: absolute;
+            top: 10px; /* Alinha no topo no desktop */
+            right: 10px; /* Alinha à direita no desktop */
+            font-size: 20px;
+            background-color: unset;
+        }
+
         .menu-overlay {
             display: none;
         }
@@ -120,15 +128,26 @@
                 border-bottom: 1px solid #444;
             }
 
+            #login-user {
+
+                /*position: ;*/
+                top: unset; /* Remove alinhamento do topo */
+                bottom: 18vh; /* Alinha no canto inferior esquerdo */
+                left: 10px;
+                border: none;
+                width: 10px;
+ 
+            }
+
             .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.897); /* Fundo semi-transparente */
-            z-index: 999; /* Atrás do menu, mas acima do conteúdo */
-            display: none; /* Oculto por padrão */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.897); /* Fundo semi-transparente */
+                z-index: 999; /* Atrás do menu, mas acima do conteúdo */
+                display: none; /* Oculto por padrão */
             }
 
 

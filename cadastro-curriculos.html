@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Currículos</title>
+    <title>Cadastro de Currículos</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="menu.css">
+
+    <script type="module">
+
+        // Verificar autenticação
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <style>
-        body {
+
+        .content-area{
+            margin: 2rem;
+
+        }
+        
+       /* body {
             font-family: Arial, sans-serif;
             margin: 2rem;
         }
@@ -13,7 +32,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 2rem;
+            margin: 2rem;
         }
 
         table, th, td {
@@ -23,54 +42,100 @@
         th, td {
             padding: 0.5rem;
             text-align: left;
-        }
+        }*/
 
         form {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 2rem;
+            padding: 0px 0px;
+            border: 1px solid #a5a4a4;
+            border-radius: 8px;
+            background-color: #fff;
         }
 
-        input, select, button {
+        input,select, button {
             padding: 0.5rem;
             font-size: 1rem;
         }
+        
+        #cor_secundaria{
+            padding: 0px;
+        }
+
+        #cor_primaria{
+            padding: 0px;
+        }
+
 
         button {
             cursor: pointer;
         }
+
+        /* Responsividade */
+        @media screen and (max-width: 768px) {
+
+
+
+        }
+
+
     </style>
 </head>
 <body>
-    <h1>CRUD Currículos</h1>
-    <form id="form">
-        <input type="hidden" id="id">
-        <input type="text" id="empresa" placeholder="Empresa" required>
-        <input type="text" id="param" placeholder="Parâmetro (único)" required>
-        <input type="text" id="nome_curriculo" placeholder="Nome do Currículo" required>
-        <input type="number" id="video" placeholder="ID do Vídeo">
-        <input type="color" id="cor_primaria" placeholder="Cor Primária">
-        <input type="color" id="cor_secundaria" placeholder="Cor Secundária">
-        <button type="submit">Salvar</button>
-    </form>
-    <table id="curriculos">
-        <thead>
-            <tr>
-                <!--th>ID</th-->
-                <th>Empresa</th>
-                <th>Parâmetro</th>
-                <th>Nome</th>
-                <th>Vídeo</th>
-                <th>Cor Primária</th>
-                <th>Cor Secundária</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 
+    <div id="menu-container">
+        <script type="module">
+            import { loadMenu } from './menu-adm.js';
+            loadMenu('#menu-container');
+        </script>
+    </div>
+    <div class="content-area">
+    
+    <h1>Cadastro de Currículos</h1>
+
+
+    <form id="form">
+        <p style="width: 100%; background-color: #333; color: #fff; padding: 10px; margin: 0px; border-radius: 7px 7px 0px 0px;"><b>Cadastrar/editar currículo</b></p>
+        <div style="padding: 10px 20px 20px 20px;">
+            <input type="hidden" id="id">
+            <input type="text" id="empresa" placeholder="Empresa" required>
+            <input type="text" id="param" placeholder="Parâmetro (único)" required>
+            <input type="text" id="nome_curriculo" placeholder="Nome do Currículo" required>
+            <input type="text" id="video" placeholder="ID do Vídeo">
+            <input type="color" id="cor_primaria">
+            <input type="color" id="cor_secundaria">
+            <button type="submit">Salvar</button>
+            <button type="button" id="cancelar-edicao">Cancelar</button>
+        </div>
+    </form>
+    <div class="table-wrapper">   
+        <table id="curriculos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>Parâmetro</th>
+                    <th>Nome Currículo</th>
+                    <th>Vídeo</th>
+                    <th>Cor Primária</th>
+                    <th>Cor Secundária</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div> 
+</div>
 <script type="module">
+
+        // Verificar autenticação
+       /* const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            window.location.href = 'login.html';
+        }*/
+
     import { supabase } from './supabaseClient.js';
 
     const form = document.getElementById('form');
@@ -78,7 +143,7 @@
 
     // Função para carregar currículos
     async function loadCurriculos() {
-        const { data, error } = await supabase.from('curriculos').select('*');
+        const { data, error } = await supabase.from('curriculos').select('*').order('id', { ascending: true });
         if (error) {
             alert('Erro ao carregar currículos: ' + error.message);
             return;
@@ -92,7 +157,7 @@
         curriculos.forEach((curriculo) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-
+                <td>${curriculo.id}</td>
                 <td>${curriculo.empresa}</td>
                 <td>${curriculo.param}</td>
                 <td>${curriculo.nome_curriculo}</td>
@@ -100,8 +165,9 @@
                 <td>${curriculo.cor_primaria || ''}</td>
                 <td>${curriculo.cor_secundaria || ''}</td>
                 <td>
-                    <button onclick="editCurriculo(${curriculo.id})">Editar</button>
-                    <button onclick="deleteCurriculo(${curriculo.id})">Excluir</button>
+                    <button onclick="editCurriculo(${curriculo.id})"><i class="fas fa-pen"></i></button>
+                    <button onclick="deleteCurriculo(${curriculo.id})"><i class="fas fa-times"></i></button>
+                    <button onclick="copyToClipboard('${curriculo.param}')"><i class="fas fa-link"></i></button>
                 </td>
             `;
             curriculosTable.appendChild(row);
@@ -141,6 +207,29 @@
         loadCurriculos();
     });
 
+    const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
+
+    // Cancelar edição
+    cancelarEdicaoBtn.addEventListener('click', () => {
+    form.reset();
+    });
+
+    
+    window.copyToClipboard = async (param) => {
+        // Define a URL base
+        const baseURL = "https://lucaspereiraborges.netlify.app/#param=";
+        // Concatena a URL com o parâmetro
+        const fullURL = baseURL + param;
+        // Copia a URL para a área de transferência
+        navigator.clipboard.writeText(fullURL).then(() => {
+           alert("Link de compartilhamento de currículo copiado para a área de transferência!"); // Feedback visual
+        }).catch(err => {
+            console.error("Erro ao copiar para a área de transferência: ", err);
+        });
+    }
+
+
+
     // Função para carregar dados no formulário para edição
     window.editCurriculo = async (id) => {
         const { data, error } = await supabase.from('curriculos').select('*').eq('id', id).single();
@@ -155,6 +244,11 @@
         form.video.value = data.video || '';
         form.cor_primaria.value = data.cor_primaria || '';
         form.cor_secundaria.value = data.cor_secundaria || '';
+
+        //window.scroll({scrollTop:0}, 'slow'); //slow, medium, fast
+
+        window.scroll({  top: 0, behavior: "smooth",});
+
     };
 
     // Função para excluir currículo
