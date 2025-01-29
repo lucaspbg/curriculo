@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Currículo</title>
+
+    <link rel="stylesheet" href="style.css">    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script type="module" src="estilosDinamicos.js"></script>
+    <link rel="stylesheet" href="menu.css">
+    <script type="module">
+        import { aplicarEstilosDinamicos } from './estilosDinamicos.js';
+        aplicarEstilosDinamicos();
+    </script>
+    
+
+        <style>
+        /* Estilos básicos */
+        .back-image {
+            background: url('img/background.jpg') no-repeat center center ;
+            background-size: cover;
+
+        }
+
+        .back-image-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+
+        }
+
+        .container-curriculo {
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            overflow: hidden;
+            max-width: 800px;
+            width: 90%;
+            margin: 15% auto;
+
+        }
+
+
+        @media (min-width: 768px) {
+        
+        .container-curriculo {
+            flex-direction: row;            
+            margin: 7% auto;
+        }
+
+        .back-image-overlay {
+            min-height: 100vh;
+
+        }
+
+
+    }
+
+
+    </style>
+
+</head>
+<body>
+    <div class="back-image">
+        <div class="back-image-overlay">
+            <div id="menu-container">
+                <script type="module">
+                    import { loadMenu } from './menu.js';
+                    loadMenu('#menu-container');
+                </script>
+            </div>
+            
+ 
+            <div class="container-curriculo">
+                <div class="spinner-overlay" id="spinner">
+                    <div class="spinner"></div>
+            </div>
+
+                
+
+            <script type="module">
+
+
+                document.getElementById('spinner').style.display = 'none';
+                
+
+            </script>
+        </div>
+    </div>
+</body>
+</html>

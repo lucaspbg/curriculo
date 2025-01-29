@@ -113,6 +113,8 @@
             background-color: var(--secondary-color, #0056b3);
         }
 
+
+
         @media (min-width: 768px) {
         
         .container-curriculo {
@@ -142,20 +144,37 @@
                 </script>
             </div>
             
+            <div id="containerStatus">
+                <div class="pulsar">
+                    <span style="--span:1"></span>
+                    <span style="--span:2"></span>
+                    <span style="--span:3"></span>
+                    <span style="--span:4"></span>
+                </div>
+                <p style="font-size: 12px;"><b>Disponível para contratação</b></p>
+                
+            </div>
+
             <div class="container-curriculo">
                 <div class="spinner-overlay" id="spinner">
                     <div class="spinner"></div>
-                </div>
+            </div>
+
                 <div class="left">
                     <img src="img/lucas.jpg" alt="Foto do Lucas">
                     <h1 class="identificacao">
-                        <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges
+                        <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges<br>
+
                     </h1>
-                    <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferença!</p>
+
+
+                     <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferença no ramo de tecnologia digital.</p>
                 </div>
                 <div class="right">
+
+
                     <h1 style="font-family: 'Ubuntu', Arial, sans-serif;">Bem-vindos!</h1>
-                    <p>Navegue pelo site para explorar mais sobre meus projetos e experiências.</p>
+                    <p>Navegue pelo site para explorar mais sobre mim.</p>
                     <div class="button-container" id="button-container"></div>
                 </div>
             </div>
@@ -187,8 +206,8 @@
                         const nomeCurriculo = empresaInfo['nome_curriculo'].trim();
                         const nomeEmpresa = empresaInfo['empresa'].trim();
 
-                        buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Baixar Currículo</a>`;
-                        empresaContainer.innerHTML = `${nomeEmpresa}, estou em busca da próxima oportunidade de fazer a diferença!`;
+                        buttonContainer.innerHTML = `<a href="pdf/${nomeCurriculo}.pdf" target="_blank">Ver Currículo PDF</a>`;
+                        empresaContainer.innerHTML = `${nomeEmpresa}, estou em busca da próxima oportunidade de fazer a diferença no ramo de tecnologia digital.`;
 
                         document.getElementById('spinner').style.display = 'none';
                     } catch (err) {
@@ -199,7 +218,7 @@
 
                 function exibirErro() {
                     const buttonContainer = document.getElementById('button-container');
-                    buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Baixar Currículo</a>`;
+                    buttonContainer.innerHTML = `<a href="pdf/Curriculo_Padrao.pdf" target="_blank">Ver Currículo PDF</a>`;
                     document.getElementById('spinner').style.display = 'none';
                 }
 

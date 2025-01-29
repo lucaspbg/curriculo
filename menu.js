@@ -69,11 +69,13 @@ function setupMenu() {
         const videoButton = document.getElementById("videoButton");
         const cursosButton = document.getElementById("cursosButton");
         const leiturasButton = document.getElementById("leiturasButton");
+        const sobreButton = document.getElementById("sobreButton");
 
         if (curriculoButton) curriculoButton.href = basePath + "/#" + "param=" + param;
         if (videoButton) videoButton.href = "video#" + "param=" + param;
         if (cursosButton) cursosButton.href = "cursos-treinamentos#" + "param=" + param;
         if (leiturasButton) leiturasButton.href = "leituras#" + "param=" + param;
+        if (sobreButton) sobreButton.href = "sobre#" + "param=" + param;
         
     }else{
 
@@ -81,6 +83,7 @@ function setupMenu() {
         if (videoButton) videoButton.href = "video";
         if (cursosButton) cursosButton.href = "cursos-treinamentos";
         if (leiturasButton) leiturasButton.href = "leituras";
+        if (sobreButton) sobreButton.href = "sobre";
 
     }
     
