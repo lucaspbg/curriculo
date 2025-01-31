@@ -13,9 +13,9 @@
         .navbar a {
             color: white;
             text-decoration: none;
-            padding: 12px 20px;
+            padding: 12px 10px;
             display: inline-block;
-            font-size: 18px;
+            font-size: 17px;
 
 
         }
@@ -86,9 +86,128 @@
             display: none;
         }
 
+        .containerStatus{
+            position: absolute;
+            background-color: #fff;
+            width: 210px;
+            height: 33px;
+            display: flex;
+            cursor: default;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100px;            
+            right: 25px;
+            Top:75px;
+            z-index: 1000; /* Aumente para garantir que fique acima do tooltip */
+            
+        }
+
+         .pulsar{
+            width: 10px;
+            height: 10px;
+            background-color: rgb(1, 187, 17);
+            border-radius: 50%;
+            position: relative;
+            margin-right: 15px;
+            
+       
+            & span{
+                width: 100%;
+                height: 100%;
+                background-color: inherit;
+                position: absolute;
+                border-radius: 50%;
+                animation: pulsar 4s infinite;
+                animation-delay: calc(1s * var(--span));
+                opacity: 0.8;
+            }
+        }
+       
+       
+       
+        @keyframes pulsar {
+            to{
+                scale: 3;
+                opacity: 0;
+            }
+        }
+       
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            width: 170px;
+            right: 40px;
+            Top:113px;
+            background: white;
+            padding: 25px 8px 8px 8px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-42px);
+            transition: opacity 1s ease, transform 1s ease;
+            pointer-events: none; /* Evita que o tooltip bloqueie cliques quando invisível */
+            z-index: 1; /* Um nível abaixo da .containerStatus */
+            
+        }
+
+
+        .tooltip.ativo {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto; /* Permite interações quando visível */
+            z-index: 1; /* Fica acima da .containerStatus quando visível */
+        }
+
+
+
+        /* Botões */
+        .tooltip-buttons {
+            display: inline-flex;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .tooltip-buttons a, #copiarEmail {
+            text-decoration: none;
+            font-size: 22px;
+            background-color: #747474;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.5s;
+            cursor: pointer;
+
+        }
+
+        .tooltip-buttons a i, #copiarEmail {
+            color: #ffffff;
+
+        }
+
+        .tooltip-buttons a:hover, #copiarEmail:hover  {
+            background: #333;
+        }
+
+        #fechar-toltip-status {
+            color:#313131;
+            padding: 2px 5px 0px 5px;
+            border-radius: 50px;
+            position: absolute;
+            right: 15px;
+            top: 10px;
+        }
+        
+        #fechar-toltip-status:hover {
+            background-color: #333;
+            color: #fff;
+        } 
+      
 
         /* Responsividade */
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 790px) {
             .navbar {
                 position: fixed;
                 top: 0;
@@ -148,6 +267,18 @@
                 background-color: rgba(0, 0, 0, 0.897); /* Fundo semi-transparente */
                 z-index: 999; /* Atrás do menu, mas acima do conteúdo */
                 display: none; /* Oculto por padrão */
+            }
+
+            #containerStatus{
+
+                 right: 25px;
+                 Top:15px
+            
+             }
+
+                     /* Tooltip */
+            .tooltip {
+                Top:53px;                               
             }
 
 

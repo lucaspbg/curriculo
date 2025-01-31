@@ -29,6 +29,47 @@ export async function loadMenu(containerSelector) {
     } catch (error) {
         console.error('Erro ao carregar o menu:', error);
     }
+
+
+    const statusContainer = document.getElementById("containerStatus");
+    const tooltip = document.getElementById("tooltip");
+    const fecharToltipStatus = document.getElementById("fechar-toltip-status");
+
+
+    // Exibir tooltip no hover
+    statusContainer.addEventListener("mouseenter", () => {
+        tooltip.classList.add("ativo");
+       
+        
+    });
+
+
+    // Fechar tooltip ao clicar fora
+    document.addEventListener("click", (event) => {
+        if (!statusContainer.contains(event.target) && !tooltip.contains(event.target)) {
+           tooltip.classList.remove("ativo");
+            
+        }
+    });
+
+    // Fechar tolltip
+    fecharToltipStatus.addEventListener("click", () => {
+       tooltip.classList.remove("ativo");
+        
+    });
+
+    copiarEmail.addEventListener("click", () => {
+        const baseURL = "lucaspereira_borges@hotmail.com";
+        // Copia a URL para a área de transferência
+        navigator.clipboard.writeText(baseURL).then(() => {
+           alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
+        }).catch(err => {
+            console.error("Erro ao copiar para a área de transferência: ", err);
+        });
+    });
+
+
+
 }
 
 function toggleMenu() {
@@ -105,4 +146,8 @@ function setActiveLink() {
             link.classList.remove('active'); // Remove a classe ativa
         }
     });
+
 }
+
+
+

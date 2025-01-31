@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Currículo</title>
+    <script>fetch('favicon.html').then(response => response.text()).then(data => {document.head.insertAdjacentHTML('beforeend', data);});</script>
+    <title>Currículo - Lucas Pereira Borges</title>
 
     <link rel="stylesheet" href="style.css">    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -38,9 +37,10 @@
             flex-direction: column;
             border-radius: 15px;
             overflow: hidden;
-            max-width: 800px;
+            max-width: 850px;
             width: 90%;
-            margin: 15% auto;
+            margin: 11vh auto !important;
+            
 
         }
 
@@ -119,7 +119,7 @@
         
         .container-curriculo {
             flex-direction: row;            
-            margin: 7% auto;
+            margin: 2% auto;
         }
 
         .back-image-overlay {
@@ -144,17 +144,6 @@
                 </script>
             </div>
             
-            <div id="containerStatus">
-                <div class="pulsar">
-                    <span style="--span:1"></span>
-                    <span style="--span:2"></span>
-                    <span style="--span:3"></span>
-                    <span style="--span:4"></span>
-                </div>
-                <p style="font-size: 12px;"><b>Disponível para contratação</b></p>
-                
-            </div>
-
             <div class="container-curriculo">
                 <div class="spinner-overlay" id="spinner">
                     <div class="spinner"></div>
@@ -164,17 +153,21 @@
                     <img src="img/lucas.jpg" alt="Foto do Lucas">
                     <h1 class="identificacao">
                         <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges<br>
-
                     </h1>
 
-
+                    <div class="tooltip-buttons">                                       
+                    <a href="https://wa.me/5548996086440" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <div id="copiarEmailContato"><i class="fas fa-envelope"></i></div>
+                    <a href="http://www.linkedin.com/in/lucas-pereira-borges-lpb" target="_blank" ><i class="fab fa-linkedin"></i></a>
+                    </div>
+                    
                      <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferença no ramo de tecnologia digital.</p>
                 </div>
                 <div class="right">
 
 
                     <h1 style="font-family: 'Ubuntu', Arial, sans-serif;">Bem-vindos!</h1>
-                    <p>Navegue pelo site para explorar mais sobre mim.</p>
+                    <p>Navegue por este site para explorar mais sobre mim.</p>
                     <div class="button-container" id="button-container"></div>
                 </div>
             </div>
