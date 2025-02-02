@@ -1,0 +1,15 @@
+# Ativar RewriteEngine
+RewriteEngine On
+
+# Define a base para o ambiente local (se for localhost/curriculo)
+RewriteBase /curriculo/
+
+# Redirecionar URLs sem extensão para arquivos .html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ $1.html [L]
+
+# Redirecionar rotas amigáveis para index.html (se necessário)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L]
