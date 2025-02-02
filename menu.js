@@ -63,7 +63,8 @@ export async function loadMenu(containerSelector) {
         const baseURL = "lucaspereira_borges@hotmail.com";
         // Copia a URL para a área de transferência
         navigator.clipboard.writeText(baseURL).then(() => {
-           alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
+           //alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
+           showToast("O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
         }).catch(err => {
             console.error("Erro ao copiar para a área de transferência: ", err);
         });
