@@ -113,66 +113,97 @@
             background-color: var(--secondary-color, #0056b3);
         }
 
-
-        .contact-buttons {
-            display: inline-flex;
-            text-align: center;
-            gap: 10px;
-            background-color: #ffffff;
-            width: 300px;
-            height: 100px;
-        }
-
-        .contact-buttons a, #copiarEmailContato {
-            align-items: center;
-            align-content: center;
+        .button-contact {
+            display: inline-block;
+            background-color: var(--primary-color, #007BFF);
+            color: #fff;
             text-decoration: none;
-            font-size: 22px;
-            background-color: #747474;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 5px;
-            transition: 0.5s;
+            margin-top: 20px;
+           /* font-weight: bold;*/
+            transition: background-color 0.3s;
+            font-family: 'Ubuntu', Arial, sans-serif;
             cursor: pointer;
 
         }
 
-        .contact-buttons a {
-            color: #ffffff;
-
+        .button-contact:hover {
+            background-color: var(--secondary-color, #0056b3);
         }
-
-        .contact-buttons a:hover {
-            background: #333;
-        }
-
 
         .contact-popup {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: #33333383;
-            display: none;
+            background: #24242483;            
             justify-content: center;
             align-items: center;
             z-index: 2;
-            /*display: inline-flex;*/
-            /*gap: 10px;*/
+            display: none;
+                        
+        }        
 
+        .contact-container {            
+            text-align: center;
+            background-color: #ffffff;
+            width: 420px;
+            height: 250px;
+            border-radius: 15px;           
+        }
+
+        .contact-buttons a, #copiarEmailContato {
+            display: inline-flex;
+            text-align: center;
+            text-decoration: none;
+            font-size: 22px;
+            background-color: #747474;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.5s;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            
+        }
+
+
+        .contact-buttons a:hover, #copiarEmailContato:hover {
+            background: #333;
+        }
+
+        .fechar-popup-contact{
+            text-align: right;
 
         }
+
+        .fechar-popup-contact i{
+            color:#313131;
+            padding: 3px 6px 3px 6px;
+            margin: 8px 8px 0px 0px;
+            border-radius: 50px; 
+            text-align: right;
+            font-size: 22px;
+
+        }
+
+        .fechar-popup-contact i:hover{
+            background-color: #333;
+            color: #fff;
+        
+        }        
 
 
         @media (min-width: 768px) {
         
-        .container-curriculo {
-            flex-direction: row;            
-            margin: 2% auto;
-        }
+            .container-curriculo {
+                flex-direction: row;            
+                margin: 2% auto;
+            }
 
-        .back-image-overlay {
-            min-height: 100vh;
+            .back-image-overlay {
+                min-height: 100vh;
 
         }
 
@@ -184,6 +215,26 @@
 
 </head>
 <body>
+
+    <div class="contact-popup" id="contact-popup">  
+        <div class="contact-container">
+            <div>
+                <div class="fechar-popup-contact" id="fechar-popup-contact">
+                    <i class="fas fa-times"></i>
+                </div> 
+
+                <h2>Fale comigo:</h2>
+                <p><b>E-mail:</b> lucaspereira_borges@hotmail.com</p>
+                <p><b>Celular:</b> (48) 99608-6440</p>
+                    <div class="contact-buttons">
+                        <a href="https://wa.me/5548996086440" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <div id="copiarEmailContato"><i class="fas fa-envelope"></i></div>
+                        <a href="http://www.linkedin.com/in/lucas-pereira-borges-lpb" target="_blank" ><i class="fab fa-linkedin"></i></a>
+                     </div>
+            </div>
+        </div>
+    </div>
+
     <div class="back-image">
         <div class="back-image-overlay">
             <div id="menu-container">
@@ -198,30 +249,24 @@
                     <div class="spinner"></div>
             </div>
 
-            <div class="contact-popup">  
-                <div class="contact-buttons">                                       
-                    <a href="https://wa.me/5548996086440" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <div id="copiarEmailContato"><i class="fas fa-envelope"></i></div>
-                    <a href="http://www.linkedin.com/in/lucas-pereira-borges-lpb" target="_blank" ><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>    
-
                 <div class="left">
                     <img src="img/lucas.jpg" alt="Foto do Lucas">
                     <h1 class="identificacao">
-                        <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges1<br>
+                        <span style="font-size: 16px;">Olá, eu sou</span><br>Lucas Pereira Borges<br>
                     </h1>
 
-
-                    
                      <p class="empresa" id="empresa">Estou em busca da próxima oportunidade de fazer a diferença no ramo de tecnologia digital.</p>
+                      <div class="button-contact" id="button-contact">Fale Comigo</div>
+                
                 </div>
                 <div class="right">
-
-
                     <h1 style="font-family: 'Ubuntu', Arial, sans-serif;">Bem-vindos!</h1>
-                    <p>Navegue por este site para explorar mais sobre mim.</p>
+                    <p>Cliqie no botão abaixo para ter acesso ao meu currículo PDF, onde está detalhada toda a minha carreira proffissional.</p>
                     <div class="button-container" id="button-container"></div>
+                        <div>
+                        <p>Navegue por este site para explorar mais sobre mim.</p>
+                        </div>
+
                 </div>
             </div>
 
@@ -270,6 +315,35 @@
 
                 const param = getParamFromURL();
                 carregarDados(param);
+
+                const PopupContact = document.getElementById("contact-popup");
+                const fecharPopupContact = document.getElementById("fechar-popup-contact");
+                const ButtomContact = document.getElementById("button-contact");
+                const copiarEmailContato = document.getElementById("copiarEmailContato");
+
+                
+                fecharPopupContact.addEventListener("click", () => {
+                PopupContact.style.display = 'none';
+                    
+                });
+
+                ButtomContact.addEventListener("click", () => {
+                PopupContact.style.display = 'inline-flex';
+                    
+                });
+
+                copiarEmailContato.addEventListener("click", () => {
+                    const baseURL = "lucaspereira_borges@hotmail.com";
+                    // Copia a URL para a área de transferência
+                    navigator.clipboard.writeText(baseURL).then(() => {
+                    alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
+                    }).catch(err => {
+                        console.error("Erro ao copiar para a área de transferência: ", err);
+                    });
+                });
+                
+
+
             </script>
         </div>
     </div>
