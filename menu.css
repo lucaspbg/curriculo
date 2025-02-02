@@ -92,13 +92,13 @@
             width: 210px;
             height: 33px;
             display: flex;
-            cursor: default;
+            cursor: pointer;
             justify-content: center;
             align-items: center;
             border-radius: 100px;            
             right: 25px;
             Top:75px;
-            z-index: 1000; /* Aumente para garantir que fique acima do tooltip */
+           
             
         }
 
@@ -150,7 +150,7 @@
             transform: translateY(-42px);
             transition: opacity 1s ease, transform 1s ease;
             pointer-events: none; /* Evita que o tooltip bloqueie cliques quando invisível */
-            z-index: 1; /* Um nível abaixo da .containerStatus */
+            
             
         }
 
@@ -159,7 +159,7 @@
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto; /* Permite interações quando visível */
-            z-index: 1; /* Fica acima da .containerStatus quando visível */
+            
         }
 
 

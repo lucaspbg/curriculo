@@ -37,7 +37,8 @@ export async function loadMenu(containerSelector) {
 
 
     // Exibir tooltip no hover
-    statusContainer.addEventListener("mouseenter", () => {
+    //statusContainer.addEventListener("mouseenter", () => {
+    statusContainer.addEventListener("click", () => {    
         tooltip.classList.add("ativo");
        
         
