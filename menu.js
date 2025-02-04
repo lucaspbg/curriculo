@@ -34,6 +34,7 @@ export async function loadMenu(containerSelector) {
     const statusContainer = document.getElementById("containerStatus");
     const tooltip = document.getElementById("tooltip");
     const fecharToltipStatus = document.getElementById("fechar-toltip-status");
+    const copiarEnderecoEmail = document.getElementById("copiarEmail");
 
 
     // Exibir tooltip no hover
@@ -59,12 +60,12 @@ export async function loadMenu(containerSelector) {
         
     });
 
-    copiarEmail.addEventListener("click", () => {
+    copiarEnderecoEmail.addEventListener("click", () => {
         const baseURL = "lucaspereira_borges@hotmail.com";
         // Copia a URL para a área de transferência
         navigator.clipboard.writeText(baseURL).then(() => {
-           //alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
-           showToast("O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
+            //alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
+            showToast("O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
         }).catch(err => {
             console.error("Erro ao copiar para a área de transferência: ", err);
         });

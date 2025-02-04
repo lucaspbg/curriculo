@@ -19,6 +19,7 @@
     opacity: 1;
     transform: translateX(0);
     transition: opacity 0.5s, transform 0.5s;
+    
 }
 
 /* Cores para diferentes tipos */
@@ -30,5 +31,25 @@
 /* Animação de saída */
 .fade-out {
     opacity: 0;
-    transform: translateX(100px);
+    transform: translateY(20px);
+}
+
+/* Responsividade */
+@media screen and (max-width: 790px) {
+    #toastContainer {
+        right: 50%;
+        transform: translateX(50%);
+        bottom: 10px;
+        width: 100%;
+        align-items: center;
+        
+    }
+
+    .toast {
+        width: 90%; /* Ajusta para quase toda a tela, mas com margem */
+        max-width: 350px; /* Garante que não fique muito largo */
+        
+
+        
+    }
 }

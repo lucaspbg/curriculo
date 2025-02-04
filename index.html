@@ -18,30 +18,43 @@
     <link rel="stylesheet" href="toast.css">
     <script src="toast.js"></script>
 
+
+
         <style>
         /* Estilos básicos */
         .back-image {
-            background: url('img/background.jpg') no-repeat center center ;
+            background: url('img/background.jpg') no-repeat center center;
             background-size: cover;
-
+            background-attachment: fixed; /* Fixa a imagem de fundo */
+            width: 100%;
+            /*height: 100vh; /* Define altura total da viewport */
+            /*position: fixed; /* Mantém fixo na tela */
+            top: 0;
+            left: 0;
+            z-index: -1; /* Coloca a imagem atrás do conteúdo */
         }
 
         .back-image-overlay {
             background: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            position: relative; /* Garante que o conteúdo fique acima da imagem */
+            z-index: 1;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-
+    
+            
         }
+        
+
 
         .container-curriculo {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;            
             border-radius: 15px;
             overflow: hidden;
             max-width: 850px;
             width: 90%;
-            margin: 11vh auto !important;
+            margin: 130px auto 40px auto !important;
             
 
         }
@@ -205,15 +218,15 @@
         }        
 
 
-        @media (min-width: 768px) {
+        @media screen and (max-width: 790px) {
         
             .container-curriculo {
-                flex-direction: row;            
-                margin: auto;
+                flex-direction: column;         
+                margin:120px auto 40px auto !important;
             }
 
             .back-image-overlay {
-                min-height: 100vh;
+                /*min-height: 100vh;*/
 
         }
 
@@ -348,7 +361,7 @@
                     // Copia a URL para a área de transferência
                     navigator.clipboard.writeText(baseURL).then(() => {
                     //alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
-                    showToast("O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
+                    showToast("123 O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
                     }).catch(err => {
                         console.error("Erro ao copiar para a área de transferência: ", err);
                     });

@@ -5,7 +5,10 @@
     height: 65px;
     background-color: #333; 
     width: 100%; 
-      
+    position: fixed;
+    margin: 100;
+    
+          
 }
 
 /* Estilo geral da página */
@@ -13,7 +16,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;   
+    background-color: #f4f4f4; 
                 
 }
 
@@ -21,7 +24,7 @@ body {
 .container {
     max-width: 1200px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 85px 20px 20px 20px;
         text-align: center; /* Centraliza o conteúdo */
 }
 
