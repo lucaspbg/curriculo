@@ -20,6 +20,11 @@ body {
                 
 }
 
+
+body.no-scroll {
+    overflow: hidden;
+}
+
 /* Estilização do Container */
 .container {
     max-width: 1200px;

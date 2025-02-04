@@ -78,6 +78,7 @@ export async function loadMenu(containerSelector) {
 function toggleMenu() {
     const navbar = document.querySelector('.navbar');
     const overlay = document.querySelector('.menu-overlay');
+    const body = document.body;
 
     // Alterna o estado ativo do menu
     navbar.classList.toggle('active');
@@ -85,8 +86,10 @@ function toggleMenu() {
     // Exibe/esconde o overlay com base no estado do menu
     if (navbar.classList.contains('active')) {
         overlay.style.display = 'block';
+        body.classList.toggle('no-scroll');
     } else {
         overlay.style.display = 'none';
+         body.classList.remove('no-scroll');
     }
 }
 
