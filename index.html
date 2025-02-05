@@ -20,7 +20,7 @@
 
 
 
-        <style>
+    <style>
         /* Estilos básicos */
         .back-image {
             background: url('img/background.jpg') no-repeat center center;
@@ -40,11 +40,9 @@
             position: relative; /* Garante que o conteúdo fique acima da imagem */
             z-index: 1;
             display: flex;
-            flex-direction: column;
-    
+            flex-direction: column;    
             
-        }
-        
+        }       
 
 
         .container-curriculo {
@@ -54,8 +52,7 @@
             overflow: hidden;
             max-width: 850px;
             width: 90%;
-            margin: 130px auto 40px auto !important;
-            
+            margin: 130px auto 40px auto !important;            
 
         }
 
@@ -90,8 +87,7 @@
         .identificacao{
 
             text-align: left;
-            font-family: 'Ubuntu', Arial, sans-serif;
- 
+            font-family: 'Ubuntu', Arial, sans-serif; 
 
         }
 
@@ -148,7 +144,7 @@
         }
 
         .contact-popup {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100vh;
             background: rgba(0, 0, 0, 0.897);;            
@@ -227,16 +223,26 @@
 
             .back-image-overlay {
                 min-height: 105vh;
+            }
+            
+            .back-image {
+            background-size: auto;
+            background-attachment: fixed; /* Fixa a imagem de fundo */
+            /*height: 100vh; /* Define altura total da viewport */
+            /*position: fixed; /* Mantém fixo na tela */          
+
+             }
 
         }
 
 
-    }
+    
 
 
     </style>
 
 </head>
+
 <body>
 
     <div class="contact-popup" id="contact-popup">  
@@ -364,7 +370,7 @@
                     // Copia a URL para a área de transferência
                     navigator.clipboard.writeText(baseURL).then(() => {
                     //alert("O endereço de e-mail lucaspereira_borges@hotmail.com foi copiado para a área de transferência!"); // Feedback visual
-                    showToast("123 O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
+                    showToast("O e-mail lucaspereira_borges@hotmail.com foi copiado<br>para sua área de trasferência. Cole onde quiser.", "success");
                     }).catch(err => {
                         console.error("Erro ao copiar para a área de transferência: ", err);
                     });
