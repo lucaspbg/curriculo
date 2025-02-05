@@ -35,12 +35,23 @@ export async function loadMenu(containerSelector) {
     const tooltip = document.getElementById("tooltip");
     const fecharToltipStatus = document.getElementById("fechar-toltip-status");
     const copiarEnderecoEmail = document.getElementById("copiarEmail");
+    
 
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 0) {
+            statusContainer.classList.add("containerStatusScroll");
+            tooltip.classList.remove("ativo");
+
+        } else {
+            statusContainer.classList.remove("containerStatusScroll");
+            
+        }
+    });
 
     // Exibir tooltip no hover
     //statusContainer.addEventListener("mouseenter", () => {
     statusContainer.addEventListener("click", () => {    
-        tooltip.classList.add("ativo");
+    tooltip.classList.add("ativo");
        
         
     });

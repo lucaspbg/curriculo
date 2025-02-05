@@ -100,10 +100,20 @@
             border-radius: 100px;            
             right: 25px;
             Top:75px;
+            opacity: 1;
+            transition: transform 0.5s ease;
+            transform: translate(0, 0);   
            
-            
         }
-
+ 
+            
+        .containerStatusScroll {
+            opacity: 0;
+            transition: 0.5s ease;
+            transform: translate(180px, 0);
+        }
+        
+        
          .pulsar{
             width: 10px;
             height: 10px;
@@ -155,6 +165,8 @@
             
             
         }
+
+
 
 
         .tooltip.ativo {
@@ -271,17 +283,30 @@
                 display: none; /* Oculto por padrão */
             }
 
-            #containerStatus{
+            .containerStatus {
 
                  right: 25px;
-                 Top:15px
+                 Top:15px;
+                 transition: none;
+                 transform: none;
+                                
+              
             
+            }
+
+            .containerStatusScroll{
+
+                transition: none;
+                opacity: unset;
              }
 
                      /* Tooltip */
             .tooltip {
-                Top:53px;                               
+                Top:53px; 
+                                             
             }
+
+
 
 
 
