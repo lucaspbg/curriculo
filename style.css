@@ -163,11 +163,6 @@ th:nth-child(6) {
     background-color: var(--secondary-color, #252525);
 }
 
-/*Vídeo*/
-.video{
-
-    border-radius: 10px;
-}
 
 iframe {
 width: 80%; /* Torna responsivo */
@@ -180,47 +175,43 @@ border: none;
 /* Responsividade */
 @media screen and (max-width: 768px) {
 
-table {
-    width: 100%;
-    min-width: 600px; /* Define um limite mínimo para largura da tabela */
-    table-layout: auto; /* Ajusta a largura automaticamente */
-}
+    table {
+        width: 100%;
+        min-width: 600px; /* Define um limite mínimo para largura da tabela */
+        table-layout: auto; /* Ajusta a largura automaticamente */
+    }
 
-th, td {
-    padding: 5px;
-    text-align: left;
-    font-size: 12px;
-}
+    th, td {
+        padding: 5px;
+        text-align: left;
+        font-size: 12px;
+    }
 
-.btn-certificado {
-    padding: 3px 6px;
-    font-size: 12px;
-}
+    .btn-certificado {
+        padding: 3px 6px;
+        font-size: 12px;
+    }
 
-.filter-container label {
-    font-size: 12px;
-}
+    .filter-container label {
+        font-size: 12px;
+    }
 
-label[for="categoria-filter"] {
-display: inline-block;
-padding-bottom: 8px;
-}
+    label[for="categoria-filter"] {
+    display: inline-block;
+    padding-bottom: 8px;
+    }
 
-.filter-container select {
-    font-size: 14px;
+    .filter-container select {
+        font-size: 14px;
 
-}
+    }
 
-h1{
-    font-size: 18px;
+    h1{
+        font-size: 18px;
 
-}
+    }
 
-/*Vídeo*/
-.video{
-    width: 98%;
-    border-radius: 10px;
-}
+
 
 }
 

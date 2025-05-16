@@ -19,6 +19,7 @@
     <script src="toast.js"></script>
     
     <style>
+
         /* Estilos básicos */
         .back-image {
             background: url('img/background.jpg') no-repeat center center;
@@ -27,10 +28,38 @@
 
         .back-image-overlay {
             background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+            /*display: flex;
+            flex-direction: row;*/
             min-height: 100vh;
         }
+
+        .video-wrapper {
+           
+            margin: 40px auto auto auto;
+            border-radius: 10px;
+            background-color: #333;
+            max-width: 760px;
+            width: 100%;
+            height: 400px;
+        }
+
+        h1{
+            color: #fff;
+            margin: 0 auto;
+            padding: 10px 0;
+            font-size: 24px;
+        }
+
+        .video-wrapper iframe {
+           
+           max-width: 100%;
+           width: 100%;
+           height: 100%;
+           border-radius: 0px 0px 10px 10px;
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -50,19 +79,34 @@
     <div class="back-image">
         <div class="back-image-overlay">    
             <div class="container">
-                <h1>Vídeo Apresentação</h1>
+                
                 <!-- O vídeo será inserido aqui via JavaScript -->
                 <div id="video-container"></div>
             </div>
         </div>
     </div>
 
-    <script type="module">
+    <!-- Script de carregamento do vídeo -->
+      <script type="module">
         import { supabase } from './supabaseClient.js';
 
         function getParamFromURL() {
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
             return urlParams.get('param');
+        }
+
+        function extrairVideoID(url) {
+            try {
+                const urlObj = new URL(url);
+                if (urlObj.hostname.includes('youtube.com') && urlObj.searchParams.has('v')) {
+                    return urlObj.searchParams.get('v');
+                } else if (urlObj.hostname === 'youtu.be') {
+                    return urlObj.pathname.substring(1); // remove a barra inicial
+                }
+            } catch (e) {
+                console.warn("URL inválida:", url);
+            }
+            return null;
         }
 
         async function carregarVideo(param) {
@@ -73,48 +117,42 @@
                     .eq('param', param)
                     .single();
 
-                if (error) {
-                    console.error('Erro ao buscar dados do Supabase:', error);
-                    exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
-                    document.getElementById('spinner').style.display = 'none';
-                    return;
-                }
-
-                let videoSrc;
-
-                if (data) {
-                    const videoId = data.video || '0'; // Use '0' como padrão se `video` for nulo
-                    videoSrc = `videos/${videoId}.mp4`;
+                if (error || !data || !data.video) {
+                    console.warn('Vídeo não encontrado ou erro:', error);
+                    exibirVideo('dQw4w9WgXcQ'); // fallback
                 } else {
-                    videoSrc = 'videos/0.mp4'; // Vídeo padrão
-                }
-
-                // Verificar se o vídeo existe antes de exibi-lo
-                const response = await fetch(videoSrc, { method: 'HEAD' });
-
-                if (response.ok) {
-                    exibirVideo(videoSrc);
-                } else {
-                    exibirVideo('videos/0.mp4'); // Vídeo padrão se o arquivo não existir
+                    const videoID = extrairVideoID(data.video);
+                    if (videoID) {
+                        exibirVideo(videoID);
+                    } else {
+                        console.warn('ID de vídeo inválido. Exibindo padrão.');
+                        exibirVideo('dQw4w9WgXcQ');
+                    }
                 }
             } catch (err) {
-                console.error('Erro ao carregar o vídeo:', err);
-                exibirVideo('videos/0.mp4'); // Vídeo padrão em caso de erro
+                console.error('Erro ao carregar vídeo:', err);
+                exibirVideo('dQw4w9WgXcQ');
             } finally {
                 document.getElementById('spinner').style.display = 'none';
             }
         }
 
-        function exibirVideo(videoSrc) {
+        function exibirVideo(videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}`;
             const videoContainer = document.getElementById('video-container');
-            videoContainer.innerHTML = `
-                <video controls class="video">
-                    <source src="${videoSrc}" type="video/mp4">
-                    Seu navegador não suporta vídeos.
-                </video>`;
+                videoContainer.innerHTML = `
+                    <div class="video-wrapper">
+                        <h1>Vídeo Apresentação</h1>
+                        <iframe 
+                            src="${embedUrl}" 
+                            title="Vídeo do YouTube"
+                            /*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>*/
+                        </iframe>
+                    </div>`;
+
         }
 
-        // Pega o parâmetro da URL e carrega o vídeo correspondente
         const param = getParamFromURL();
         carregarVideo(param);
     </script>
