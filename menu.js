@@ -126,12 +126,14 @@ function setupMenu() {
         const curriculoButton = document.getElementById("curriculoButton");
         const videoButton = document.getElementById("videoButton");
         const cursosButton = document.getElementById("cursosButton");
+        const testesButton = document.getElementById("testesButton");
         const leiturasButton = document.getElementById("leiturasButton");
         const sobreButton = document.getElementById("sobreButton");
 
         if (curriculoButton) curriculoButton.href = basePath + "/#" + "param=" + param;
         if (videoButton) videoButton.href = "video#" + "param=" + param;
         if (cursosButton) cursosButton.href = "cursos-treinamentos#" + "param=" + param;
+        if (testesButton) testesButton.href = "testes#" + "param=" + param;
         if (leiturasButton) leiturasButton.href = "leituras#" + "param=" + param;
         if (sobreButton) sobreButton.href = "sobre#" + "param=" + param;
         
@@ -140,6 +142,7 @@ function setupMenu() {
         if (curriculoButton) curriculoButton.href = basePath + "/";
         if (videoButton) videoButton.href = "video";
         if (cursosButton) cursosButton.href = "cursos-treinamentos";
+        if (testesButton) testesButton.href = "testes";
         if (leiturasButton) leiturasButton.href = "leituras";
         if (sobreButton) sobreButton.href = "sobre";
 

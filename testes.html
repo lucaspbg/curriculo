@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>fetch('favicon.html').then(response => response.text()).then(data => {document.head.insertAdjacentHTML('beforeend', data);});</script>
 
-    <title>Cursos e Treinamentos</title>
+    <title>Leituras</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="menu.css">
     <script type="module" src="estilosDinamicos.js"></script>
@@ -29,6 +29,7 @@
 
 
         </style>
+
 </head>
 <body>
     <div class="spinner-overlay" id="spinner">
@@ -43,7 +44,7 @@
     </div>
 
     <div class="container">
-        <h1>Lista de Cursos e Treinamentos</h1>
+        <h1>Lista de Testes</h1>
 
         <div class="filter-container">
             <label for="categoria-filter">Filtrar por Categoria:</label>
@@ -52,36 +53,34 @@
             </select>
         </div>
 
-        <div class="table-wrapper">
-            <table id="curso-table">
-                <colgroup>
-                    <col style="width: 18%;">
-                    <col style="width: 16%;">
-                    <col style="width: 18%;">
-                    <col style="width: 10%;">
-                    <col style="width: 12%;">
-                    <col style="width: 12%;">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Nome do curso/treinamento</th>
-                        <th>Instituição</th>
-                        <th>Categoria</th>
-                        <th>Carga horária</th>
-                        <th onclick="sortTable()">Concluído em ▲▼</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+    <div class="table-wrapper"> 
+        <table id="leitura-table">
+            <colgroup>
+                <col style="width: 20%;"> <!-- Título do livro -->
+                <col style="width: 16%;"> <!-- Autor -->
+                <col style="width: 18%;"> <!-- Categoria -->
+                <col style="width: 10%;"> <!-- Data da leitura -->
 
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Título do livro</th>
+                    <th>Autor</th>
+                    <th>Categoria</th>
+                    <th onclick="sortTable()">Data da leitura ▲▼</th> <!-- Ordenação -->
+                    
+                </tr>
+            </thead>
+            <tbody>
+                    <!-- Conteúdo da tabela -->
+            </tbody>
+        </table>
+    </div>
     <script type="module">
 
         // Inicializar a ordem de classificação na abertura da página
         document.addEventListener("DOMContentLoaded", () => {
-            const table = document.getElementById("curso-table");
+            const table = document.getElementById("leitura-table");
             if (!table.dataset.sortOrder) {
                 table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
             }
@@ -89,9 +88,9 @@
 
             import { supabase } from './supabaseClient.js';
 
-        async function carregarCursos() {
-            const { data: cursos, error } = await supabase
-                .from('cursos_treinamentos')
+        async function carregarLeituras() {
+            const { data: leituras, error } = await supabase
+                .from('leitura_livros')
                 .select('*')
 
             if (error) {
@@ -100,35 +99,29 @@
                 return;
             }
 
-            const tbody = document.querySelector('#curso-table tbody');
+            const tbody = document.querySelector('#leitura-table tbody');
             const categoriaFilter = document.getElementById('categoria-filter');
             const categorias = new Set();
 
             tbody.innerHTML = '';
 
-            cursos.forEach(curso => {
+            leituras.forEach(leitura => {
                 const row = document.createElement('tr');
-                const dataBR = new Date(curso.concluido_em).toLocaleDateString('pt-BR', {
+                const dataBR = new Date(leitura.data_leitura).toLocaleDateString('pt-BR', {
                     month: '2-digit',
                     year: 'numeric'
                 });
 
                 row.innerHTML = `
-                    <td>${curso.nome_curso}</td>
-                    <td>${curso.instituicao}</td>
-                    <td>${curso.categoria}</td>
-                    <td>${curso.carga_horaria}</td>
+                    <td>${leitura.titulo}</td>
+                    <td>${leitura.autor}</td>
+                    <td>${leitura.categoria}</td>
                     <td>${dataBR}</td>
-                    <td>
-                        ${curso.certificado 
-                            ? `<button class="btn-certificado" onclick="verCertificado('${curso.certificado}')">Ver Certificado</button>` 
-                            : '-'}
-                    </td>
                 `;
                 tbody.appendChild(row);
 
-                if (curso.categoria) {
-                    categorias.add(curso.categoria.trim());
+                if (leitura.categoria) {
+                    categorias.add(leitura.categoria.trim());
                 }
             });
 
@@ -144,9 +137,9 @@
         }
 
         function sortTable() {
-            const table = document.getElementById('curso-table');
+            const table = document.getElementById('leitura-table');
             const rows = Array.from(table.rows).slice(1);
-            const index = 4;
+            const index = 3;
             let isAsc = table.dataset.sortOrder !== 'asc';
 
             rows.sort((a, b) => {
@@ -162,7 +155,7 @@
 
         function filterTable() {
             const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('#curso-table tbody tr');
+            const rows = document.querySelectorAll('#leitura-table tbody tr');
 
             rows.forEach(row => {
                 const categoryCell = row.cells[2];
@@ -176,13 +169,8 @@
             });
         }
 
-        // Função para exibir o certificado
-        function verCertificado(certificado) {
-            window.open('certificados/' + certificado + '.pdf', '_blank');
-        }
 
-        window.onload = carregarCursos;
-        window.verCertificado = verCertificado;
+        window.onload = carregarLeituras;
         window.filterTable = filterTable;
         window.sortTable = sortTable;
     </script>

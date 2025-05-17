@@ -222,7 +222,7 @@
       
 
         /* Responsividade */
-        @media screen and (max-width: 790px) {
+        @media screen and (max-width: 840px) {
             .navbar {
                 position: fixed;
                 top: 0;
