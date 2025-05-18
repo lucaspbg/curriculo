@@ -106,7 +106,12 @@
             transform: translate(0, 0);   
            
         }
- 
+        
+        .containerStatus:hover{
+            background-color: #dbdbdb;
+            transition: 0.5s;
+
+        }
             
         .containerStatusScroll {
             opacity: 0;

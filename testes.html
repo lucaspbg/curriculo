@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>fetch('favicon.html').then(response => response.text()).then(data => {document.head.insertAdjacentHTML('beforeend', data);});</script>
+    <script>
+        fetch('favicon.html')
+            .then(response => response.text())
+            .then(data => {
+                document.head.insertAdjacentHTML('beforeend', data);
+            });
+    </script>
 
-    <title>Leituras</title>
+    <title>Lista de Testes</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="menu.css">
     <script type="module" src="estilosDinamicos.js"></script>
@@ -17,19 +23,96 @@
     <link rel="stylesheet" href="toast.css">
     <script src="toast.js"></script>
 
+    <style>
 
-        <style>
+        .containerStatus:hover{
+            background-color: #5c5c5c !important;
+            transition: 0.5s;
+
+        }
+
 
             @media screen and (min-width: 841px) {
                 #containerStatus{
                     background-color: #333;
                     color: #fff;
                 }
-            }    
 
 
-        </style>
+            } 
 
+            @media screen and (max-width: 840px) {
+
+                .containerStatus:hover{
+                    background-color: #dbdbdb !important;
+                    transition: 0.5s;
+
+                }
+
+            }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px 15px 15px;
+            align-items: center;
+
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
+        }
+
+        .card .data {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .card button {
+            background-color: var(--primary-color, #252525);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 150px;
+        }
+
+        .card button:hover {
+            
+            background-color: var(--secondary-color, #474747);
+
+        }
+
+        .filter-container {
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .filter-container select {
+            padding: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="spinner-overlay" id="spinner">
@@ -47,132 +130,75 @@
         <h1>Lista de Testes</h1>
 
         <div class="filter-container">
-            <label for="categoria-filter">Filtrar por Categoria:</label>
-            <select id="categoria-filter" onchange="filterTable()">
-                <option value="">Todas</option>
+            <label for="ordem-select">Ordenar por:</label>
+            <select id="ordem-select" onchange="ordenarTestes()">
+                <option value="desc">Mais recentes</option>
+                <option value="asc">Mais antigos</option>
             </select>
         </div>
 
-    <div class="table-wrapper"> 
-        <table id="leitura-table">
-            <colgroup>
-                <col style="width: 20%;"> <!-- Título do livro -->
-                <col style="width: 16%;"> <!-- Autor -->
-                <col style="width: 18%;"> <!-- Categoria -->
-                <col style="width: 10%;"> <!-- Data da leitura -->
-
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Título do livro</th>
-                    <th>Autor</th>
-                    <th>Categoria</th>
-                    <th onclick="sortTable()">Data da leitura ▲▼</th> <!-- Ordenação -->
-                    
-                </tr>
-            </thead>
-            <tbody>
-                    <!-- Conteúdo da tabela -->
-            </tbody>
-        </table>
+        <div class="cards-container" id="cards-container"></div>
     </div>
+
     <script type="module">
+        import { supabase } from './supabaseClient.js';
 
-        // Inicializar a ordem de classificação na abertura da página
-        document.addEventListener("DOMContentLoaded", () => {
-            const table = document.getElementById("leitura-table");
-            if (!table.dataset.sortOrder) {
-                table.dataset.sortOrder = "asc"; // Definir a ordem padrão como ascendente
-            }
-        });
+        let testes = [];
 
-            import { supabase } from './supabaseClient.js';
-
-        async function carregarLeituras() {
-            const { data: leituras, error } = await supabase
-                .from('leitura_livros')
-                .select('*')
+        async function carregarTestes() {
+            const { data, error } = await supabase
+                .from('testes')
+                .select('*');
 
             if (error) {
-                console.error('Erro ao carregar dados do Supabase:', error);
+                console.error('Erro ao carregar testes:', error);
                 document.getElementById('spinner').style.display = 'none';
                 return;
             }
 
-            const tbody = document.querySelector('#leitura-table tbody');
-            const categoriaFilter = document.getElementById('categoria-filter');
-            const categorias = new Set();
-
-            tbody.innerHTML = '';
-
-            leituras.forEach(leitura => {
-                const row = document.createElement('tr');
-                const dataBR = new Date(leitura.data_leitura).toLocaleDateString('pt-BR', {
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-
-                row.innerHTML = `
-                    <td>${leitura.titulo}</td>
-                    <td>${leitura.autor}</td>
-                    <td>${leitura.categoria}</td>
-                    <td>${dataBR}</td>
-                `;
-                tbody.appendChild(row);
-
-                if (leitura.categoria) {
-                    categorias.add(leitura.categoria.trim());
-                }
-            });
-
-            categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria;
-                option.textContent = categoria;
-                categoriaFilter.appendChild(option);
-            });
-
-            sortTable();
+            testes = data;
+            ordenarTestes(); // inicializar com ordenação padrão
             document.getElementById('spinner').style.display = 'none';
         }
 
-        function sortTable() {
-            const table = document.getElementById('leitura-table');
-            const rows = Array.from(table.rows).slice(1);
-            const index = 3;
-            let isAsc = table.dataset.sortOrder !== 'asc';
-
-            rows.sort((a, b) => {
-                const aDate = new Date(a.cells[index].innerText.split('/').reverse().join('-'));
-                const bDate = new Date(b.cells[index].innerText.split('/').reverse().join('-'));
-
-                return isAsc ? aDate - bDate : bDate - aDate;
+        function ordenarTestes() {
+            const ordem = document.getElementById('ordem-select').value;
+            const sorted = [...testes].sort((a, b) => {
+                const dataA = new Date(a.data_teste);
+                const dataB = new Date(b.data_teste);
+                return ordem === 'asc' ? dataA - dataB : dataB - dataA;
             });
 
-            rows.forEach(row => table.tBodies[0].appendChild(row));
-            table.dataset.sortOrder = isAsc ? 'asc' : 'desc';
+            renderizarCards(sorted);
         }
 
-        function filterTable() {
-            const filterValue = document.getElementById('categoria-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('#leitura-table tbody tr');
+        function renderizarCards(lista) {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
 
-            rows.forEach(row => {
-                const categoryCell = row.cells[2];
-                const categoryText = categoryCell.textContent.toLowerCase();
+            lista.forEach(teste => {
+                const card = document.createElement('div');
+                card.className = 'card';
 
-                if (!filterValue || categoryText.includes(filterValue)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                const dataFormatada = new Date(teste.data_teste).toLocaleDateString('pt-BR');
+
+                card.innerHTML = `
+                    <h3>${teste.nome_teste}</h3>
+                    <div class="data">Data: ${dataFormatada}</div>
+                    <button onclick="baixarRelatorio('${teste.relatorio}')">Baixar relatório</button>
+                `;
+
+                container.appendChild(card);
             });
         }
 
+        function baixarRelatorio(nomeArquivo) {
+            window.open('relatorios/' + nomeArquivo + '.pdf', '_blank');
+        }
 
-        window.onload = carregarLeituras;
-        window.filterTable = filterTable;
-        window.sortTable = sortTable;
+        window.onload = carregarTestes;
+        window.baixarRelatorio = baixarRelatorio;
+        window.ordenarTestes = ordenarTestes;
     </script>
 </body>
 </html>

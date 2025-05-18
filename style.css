@@ -160,7 +160,7 @@ th:nth-child(6) {
 }
 
 .btn-certificado:hover {
-    background-color: var(--secondary-color, #252525);
+    background-color: var(--secondary-color, #474747);
 }
 
 
