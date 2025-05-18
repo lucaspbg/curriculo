@@ -49,6 +49,14 @@
 
         .card-content h3 {
             margin: 0 0 8px;
+            font-size: 16px;
+            text-align: start;
+        }
+
+        .card-content p {
+            
+            font-size: 14px;
+            text-align: start;
         }
 
         .filter-container {
@@ -70,7 +78,23 @@
                     background-color: #333;
                     color: #fff;
                 }
-            }    
+
+
+            }   
+            
+            @media screen and (max-width: 840px) {
+
+
+                .card img {
+                    height: 280px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+
+
+
+            }  
+
 
 
         </style>
@@ -100,7 +124,7 @@
             <label for="ordenar-data">Ordenar por:</label>
             <select id="ordenar-data" onchange="sortCards()">
                 <option value="desc">Mais recentes</option>
-                <option value="asc">Mais antigas</option>
+                <option value="asc">Mais antigos</option>
             </select>
         </div>
 
