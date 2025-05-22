@@ -1,15 +1,31 @@
 # Ativar RewriteEngine
-RewriteEngine On
+#RewriteEngine On
 
 # Define a base para o ambiente local (se for localhost/curriculo)
-RewriteBase /curriculo/
+#RewriteBase /curriculo/
 
 # Redirecionar URLs sem extensão para arquivos .html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ $1.html [L]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.+)$ $1.html [L]
 
 # Redirecionar rotas amigáveis para index.html (se necessário)
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)$ index.html [L]
+
+
+# Ativar o mecanismo de reescrita
+RewriteEngine On
+
+# Base do projeto (ajuste conforme sua pasta no XAMPP)
+RewriteBase /curriculo/
+
+# Redireciona URLs amigáveis para arquivos .html SE eles existirem
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.html [L]
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+# Página de erro 404 personalizada
+ErrorDocument 404 /curriculo/404.html

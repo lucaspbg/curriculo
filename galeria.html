@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload + Galeria Supabase</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .gallery img { width: 120px; margin: 5px; cursor: pointer; border: 2px solid transparent; }
+    .gallery img.selected { border-color: #007bff; }
+  </style>
+</head>
+<body>
+
+  <h2>Upload de Imagem</h2>
+
+  <label for="pasta">pasta:</label>
+  <select id="pasta">
+    <option value="midia-livros">Livros</option>
+    <option value="midia-cursos">Cursos</option>
+  </select>
+
+  <input type="file" id="fileInput" />
+  <button onclick="uploadImagem()">Enviar Imagem</button>
+
+  <h3>Galeria</h3>
+  <div class="gallery" id="galeria"></div>
+
+  <h3>Imagem selecionada:</h3>
+  <input type="text" id="imagemSelecionada" readonly />
+
+  <script type="module">
+    import { supabase } from './supabaseClient.js';
+
+    // Adicione esta linha para definir supabaseUrl corretamente
+    const supabaseUrl = 'https://wdmsfmmzaiodwxjyvdtd.supabase.co';
+
+    const fileInput = document.getElementById('fileInput');
+    const pastaSelect = document.getElementById('pasta');
+    const galeria = document.getElementById('galeria');
+    const imagemSelecionada = document.getElementById('imagemSelecionada');
+
+    async function uploadImagem() {
+      const file = fileInput.files[0];
+      if (!file) return showToast('Selecione um arquivo!', 'warning');
+
+
+
+      const pasta = pastaSelect.value;
+      const filePath = `${pasta}/${file.name}`;
+
+      const { error } = await supabase.storage.from('midia').upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true
+      });
+
+      if (error) {
+        console.error(error);
+        alert('Erro ao enviar imagem');
+        showToast('Erro ao enviar imagem', 'error');
+      } else {
+        showToast('Imagem enviada com sucesso!', 'success');
+        listarGaleria();
+      }
+    }
+
+    async function listarGaleria() {
+      const pasta = pastaSelect.value;
+
+      const { data, error } = await supabase
+        .storage
+        .from('midia')
+        .list(pasta, { limit: 100, offset: 0 });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      galeria.innerHTML = '';
+      data.forEach(img => {
+        const url = `${supabaseUrl}/storage/v1/object/public/midia/${pasta}/${img.name}`;
+        const imagem = document.createElement('img');
+        imagem.src = url;
+        imagem.alt = img.name;
+        imagem.onclick = () => {
+          document.querySelectorAll('.gallery img').forEach(el => el.classList.remove('selected'));
+          imagem.classList.add('selected');
+          imagemSelecionada.value = `${pasta}/${img.name}`;
+        };
+        galeria.appendChild(imagem);
+      });
+    }
+
+    pastaSelect.addEventListener('change', listarGaleria);
+
+    // Torna a função acessível ao botão onclick
+    window.uploadImagem = uploadImagem;
+
+    // Carrega a galeria da pasta inicial
+    listarGaleria();
+  </script>
+
+    <link rel="stylesheet" href="components/toast/toast.css">
+    <script src="components/toast/toast.js"></script>
+</body>
+</html>

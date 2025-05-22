@@ -8,7 +8,9 @@
     <title>Cadastro de Currículos</title>
 
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="menu-adm.css">
+    <link rel="stylesheet" href="components/toast/toast.css">
+    <script src="components/toast/toast.js"></script>
 
     <script type="module">
 
@@ -21,8 +23,20 @@
 
     <style>
 
+        #menu-container{
+            height: 65px;
+            background-color: #333; 
+            width: 100%; 
+            position: fixed;
+            margin: 100;
+            box-shadow: 0px 7px 15px 0px rgba(0, 0, 0, 0.432);
+            top: 0;
+                
+        }
+
+
         .content-area{
-            margin: 2rem;
+            margin: 90px 2rem;
 
         }
         
@@ -104,7 +118,8 @@
             <input type="hidden" id="id">
             <input type="text" id="empresa" placeholder="Empresa" required>
             <input type="text" id="param" placeholder="Parâmetro (único)" required>
-            <input type="text" id="nome_curriculo" placeholder="Nome do Currículo" required>
+            <input type="text" id="midia_curriculo" placeholder="Currículo" required>
+            <button type="button" onclick="MidiaModal.abrir('midia-cursos', 'midia_curriculo')">Selecionar Mídia</button>
             <input type="text" id="video" placeholder="ID do Vídeo">
             <input type="color" id="cor_primaria">
             <input type="color" id="cor_secundaria">
@@ -168,7 +183,7 @@
                 <td>${curriculo.cor_secundaria || ''}</td>
                 <td>
                     <button onclick="editCurriculo(${curriculo.id})"><i class="fas fa-pen"></i></button>
-                    <button onclick="deleteCurriculo(${curriculo.id})"><i class="fas fa-times"></i></button>
+                    <button onclick="deleteCurriculo(${curriculo.id})"><i class='fas fa-trash'></i></button>
                     <button onclick="copyToClipboard('${curriculo.param}')"><i class="fas fa-link"></i></button>
                 </td>
             `;
@@ -224,7 +239,8 @@
         const fullURL = baseURL + param;
         // Copia a URL para a área de transferência
         navigator.clipboard.writeText(fullURL).then(() => {
-           alert("Link de compartilhamento de currículo copiado para a área de transferência!"); // Feedback visual
+            //alert("Link de compartilhamento de currículo copiado para a área de transferência!"); // Feedback visual
+            showToast("Link de compartilhamento de currículo copiado para a área de transferência!", "success");
         }).catch(err => {
             console.error("Erro ao copiar para a área de transferência: ", err);
         });
@@ -271,7 +287,8 @@
 </script>
 
 
-
+<script src="components/midiaModal/midiaModal.js"></script>
+</script>
 
 
 </body>

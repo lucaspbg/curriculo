@@ -1,0 +1,55 @@
+/* Container */
+#toastContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+/* Estilos gerais do toast */
+.toast {
+    padding: 10px 15px;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.5s, transform 0.5s;
+    
+}
+
+/* Cores para diferentes tipos */
+.toast-info { background: #007bff; }
+.toast-success { background: #28a745; }
+.toast-warning { background: #ffc107; }
+.toast-error { background: #dc3545; }
+
+/* Animação de saída */
+.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Responsividade */
+@media screen and (max-width: 790px) {
+    #toastContainer {
+        right: 50%;
+        transform: translateX(50%);
+        bottom: 10px;
+        width: 100%;
+        align-items: center;
+        
+    }
+
+    .toast {
+        width: 90%; /* Ajusta para quase toda a tela, mas com margem */
+        max-width: 350px; /* Garante que não fique muito largo */
+        
+
+        
+    }
+}
