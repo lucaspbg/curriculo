@@ -1,1 +1,25 @@
-<div id="modalMidia" style="display:none"></div>
+<link rel="stylesheet" href="components/midiaModal/midiaModal.css">
+<div class="modal-content">
+  <div class="header-midia">
+    <h2>Biblioteca de Mídia</h2>
+    <div class="fechar-galeria" id="fechar-galeria"><i class='fas fa-times'></i></div>
+  </div>
+
+  <div id="areaUpload" class="area-upload">
+    <div id="dropArea" class="drop-area">
+      <p>Solte novos arquivos aqui para upload<br><span>ou</span></p>
+      <label class="botao-upload">
+        Selecionar novos arquivos
+        <input type="file" id="fileInput" multiple accept="image/*,application/pdf" hidden>
+      </label>
+    </div>
+  </div>
+
+  <div id="galeria" class="gallery"></div>
+
+  <div class="botoes-modal">
+    <button id="btnInserir" disabled>Inserir</button>
+    <button id="btnCancelar">Cancelar</button>
+  </div>
+</div>
+
